@@ -1,0 +1,23 @@
+/* styles.css */
+
+#canvas {
+    border: 1px solid black;
+    touch-action: none; /* Disable touch scrolling on the canvas */
+}
+
+.controls {
+    margin-top: 10px;
+}
+
+/* Additional styling */
+.container {
+    text-align: center;
+    margin-top: 50px;
+}
+
+button {
+    margin: 20px;
+    padding: 15px 30px;
+    font-size: 16px;
+    cursor: pointer;
+}

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Handwriting Recognition</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+</head>
+<body>
+  <div class="container">
+    <h2>Handwriting Recognition</h2>
+    <p>Choose an option to start:</p>
+    <button onclick="window.location.href='{{ url_for('canvas') }}'">Draw on Canvas</button>
+    <button onclick="window.location.href='{{ url_for('import_picture') }}'">Import a Picture</button>
+  </div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Handwriting Recognition</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+</head>
+<body>
+  <h2>Draw a Digit or Letter</h2>
+  <canvas id="canvas" width="280" height="280"></canvas>
+
+  <div class="controls">
+    <button onclick="clearCanvas()">Erase</button>
+    <button onclick="submitDrawing()">Submit</button>
+  </div>
+
+  <script src="/static/js/canvas.js"></script>
+</body>
+<footer>
+  <a href="{{ url_for('home') }}">Return to the main page</a>
+</footer>
+</html>
