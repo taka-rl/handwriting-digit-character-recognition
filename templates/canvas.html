@@ -8,17 +8,16 @@
 
 </head>
 <body>
-  <h2>Draw a Digit or Letter</h2>
-  <canvas id="canvas" width="280" height="280"></canvas>
-
-  <div class="controls">
-    <button onclick="clearCanvas()">Erase</button>
-    <button onclick="submitDrawing()">Submit</button>
+  <div class="container">
+    <h2>Draw a Digit or Letter</h2>
+    <canvas id="canvas" width="280" height="280"></canvas>
+    <div class="controls">
+      <button onclick="clearCanvas()">Erase</button>
+      <button onclick="submitDrawing()">Submit</button>
+    </div>
+    <a href="{{ url_for('home') }}">Return to the main page</a>
   </div>
 
   <script src="/static/js/canvas.js"></script>
 </body>
-<footer>
-  <a href="{{ url_for('home') }}">Return to the main page</a>
-</footer>
 </html>

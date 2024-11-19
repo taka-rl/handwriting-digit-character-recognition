@@ -7,13 +7,13 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-  <h2>Upload a Picture for Recognition</h2>
-  <form action="/upload" method="post" enctype="multipart/form-data">
-    <input type="file" name="file" accept="image/*" required>
-    <button type="submit">Submit</button>
-  </form>
+  <div class="container">
+    <h2>Upload a Picture for Recognition</h2>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      <input type="file" name="file" accept="image/*" required>
+      <button type="submit">Submit</button>
+    </form>
+    <a href="{{ url_for('home') }}">Return to the main page</a>
+  </div>
 </body>
-<footer>
-  <a href="{{ url_for('home') }}">Return to the main page</a>
-</footer>
 </html>
