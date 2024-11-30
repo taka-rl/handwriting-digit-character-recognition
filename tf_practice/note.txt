@@ -1,0 +1,25 @@
+
+
+Links:
+    Digits:
+        Get Started with Computer Vision by Building a Digit Recognition Model with Tensorflow
+        https://medium.com/artificialis/get-started-with-computer-vision-by-building-a-digit-recognition-model-with-tensorflow-b2216823b90a
+
+        Handwritten Digit Recognition using TensorFlow
+        https://www.analyticsvidhya.com/blog/2022/07/handwritten-digit-recognition-using-tensorflow/
+
+        Keras/TensorflowでMNISTデータセットの画像分類
+        https://www.ailab.ics.keio.ac.jp/b4_induction_training/docs/dl/mnist_notebook.html
+
+        ゼロからの画像認識①（理論とMNIST）
+        https://qiita.com/dolce_itf/items/be85244a31654d1d56ef
+
+        ゼロからの画像認識②（CNNの理解と実践）
+        https://qiita.com/dolce_itf/items/779c78d8254f25a6b670
+
+    Characters:
+        Optical Character Recognition Using TensorFlow
+        https://medium.com/analytics-vidhya/optical-character-recognition-using-tensorflow-533061285dd3
+
+        Handwritten Text Recognition with TensorFlow
+        https://github.com/githubharald/SimpleHTR
