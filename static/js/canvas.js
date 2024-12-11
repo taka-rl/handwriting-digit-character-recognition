@@ -47,8 +47,13 @@ function submitDrawing() {
   })
   .then(response => response.json())
   .then(data => {
-    console.log('Prediction:', data.prediction);
-    alert(`Prediction: ${data.prediction}`);
+    if(data.error){
+      console.error('Error:', data.error);
+      alert(`Error: ${data.error}`);
+    }else{
+      console.log('Prediction:', data.prediction);
+      alert(`Prediction: ${data.prediction}, Confidence: ${data.confidence.toFixed(2)}`);
+    }
   })
   .catch(error => console.error('Error:', error));
 }
