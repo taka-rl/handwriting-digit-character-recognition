@@ -27,8 +27,8 @@ def upload_picture():
     file = request.files['file']
     if file:
         print("Image is loaded")
-        image = Image.open(file).convert('L')  # Convert to grayscale
-        resized_image = preprocess_image(image)
+        # Prepare the prediction
+        resized_image = preprocess_image(file)
 
         # Predict the image
         predictions = predict_digit(resized_image)
@@ -45,9 +45,10 @@ def upload_picture():
         return jsonify({"error": "No file uploaded"}), 400
 
 
-def preprocess_image(img, target_size=(28, 28)):
+def preprocess_image(file, target_size=(28, 28)):
     """Resize the image"""
-    img = img.resize(target_size)  # Resize image
+    image = Image.open(file).convert('L')  # Convert to grayscale
+    img = image.resize(target_size)  # Resize image
     img_array = np.array(img) / 255.0  # Convert to numpy array and normalize
     return img_array[np.newaxis, :, :]  # Add batch dimension
 
