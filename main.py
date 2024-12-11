@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify, render_template
-import base64
+from tensorflow.keras import models
 from PIL import Image
-import io
 import numpy as np
 
 
@@ -27,15 +26,40 @@ def import_picture():
 def upload_picture():
     file = request.files['file']
     if file:
+        print("Image is loaded")
         image = Image.open(file).convert('L')  # Convert to grayscale
-        image = image.resize((28, 28))  # Resize to model's input size
-        image_array = np.array(image) / 255.0  # Normalize pixel value
+        resized_image = preprocess_image(image)
 
-        # Add prediction model
+        # Predict the image
+        predictions = predict_digit(resized_image)
 
-        return jsonify({"prediction": "dummy_prediction"})
+        # Extract the predicted class and confidence
+        predicted_class = int(np.argmax(predictions))  # Convert NumPy scalar to int
+        confidence = float(np.max(predictions))  # Convert Numpy scalar to float
+
+        return jsonify({"prediction": predicted_class,
+                        "confidence": confidence,
+                        "probabilities": predictions.tolist()
+                        })
     else:
         return jsonify({"error": "No file uploaded"}), 400
+
+
+def preprocess_image(img, target_size=(28, 28)):
+    """Resize the image"""
+    img = img.resize(target_size)  # Resize image
+    img_array = np.array(img) / 255.0  # Convert to numpy array and normalize
+    return img_array[np.newaxis, :, :]  # Add batch dimension
+
+
+def predict_digit(img):
+    """
+    Predict the image
+    The model used for the system will be updated.
+    """
+    # Load the model
+    model = models.load_model('./tf_practice/best_model.h5')
+    return model.predict(img)
 
 
 if __name__ == '__main__':
