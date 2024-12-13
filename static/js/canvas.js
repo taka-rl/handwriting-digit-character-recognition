@@ -2,8 +2,18 @@
 // Canvas functionality
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
-ctx.lineWidth = 10;
+const bgColor = '#000000'  // Default: black background
+ctx.lineWidth = 15;
 ctx.lineCap = 'round';
+ctx.strokeStyle = '#ffffff';  // Default: white line
+
+// Set initial background color
+function setCanvasBackground(color) {
+  ctx.fillStyle = color; // Set the background color
+  ctx.fillRect(0, 0, canvas.width, canvas.height); // Fill the canvas with the background color
+}
+setCanvasBackground(bgColor);
+
 let isDrawing = false;
 
 canvas.addEventListener('mousedown', startDrawing);
@@ -34,6 +44,10 @@ function stopDrawing(){
 
 function clearCanvas(){
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  setCanvasBackground(bgColor); // Reset the background color
+}
+function changeDrawingColor(color){
+  ctx.strokeStyle = color; // Update the stroke color
 }
 
 function submitDrawing(){
@@ -83,9 +97,9 @@ function updateResults(data){
     bar.style.height = `${(prob / maxProbability) * 100}%`;
     bar.style.left = `${index * 30}px`;
     if(index === data.prediction){
-      bar.classList.add('activ');
+      bar.classList.add('active');
     }
     bar.textContent = `${(prob * 100).toFixed(1)}%`;
     chartContainer.appendChild(bar);
-    });
+  });
 }
