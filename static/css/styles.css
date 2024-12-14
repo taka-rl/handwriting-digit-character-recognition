@@ -79,14 +79,14 @@ button {
     position: absolute;
     bottom: 0;
     width: 25px;
-    background-color: #ccc;
+    background-color: #92bf88;  /* light green for the non-predicted bar*/
     text-align: center;
     font-size: 10px;
     color: white;
 }
 
 .canvas-page .chart-bar.active {
-    background-color: #007bff;
+    background-color: #007bff;  /* blue for the predicted bar */
 }
 
 .canvas-page .chart-labels {

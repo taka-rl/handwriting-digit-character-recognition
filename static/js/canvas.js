@@ -80,25 +80,29 @@ function getEventPosition(event){
 }
 
 function updateResults(data){
+  const probabilities = data.probabilities[0];  // Access the inner array of probabilities
   const predictionElement = document.getElementById('prediction');
   const confidenceElement = document.getElementById('confidence');
   const chartContainer = document.getElementById('chartContainer');
 
   predictionElement.textContent = data.prediction;
   confidenceElement.textContent = `Confidence: ${(data.confidence * 100).toFixed(2)}%`;
+  const maxProbability = Math.max(...data.probabilities);
 
   // Clear existing chart
   chartContainer.innerHTML = '';
 
-  const maxProbability = Math.max(...data.probabilities);
-  data.probabilities.forEach((prob, index) => {
+  // Create the distribution bar chart
+  probabilities.forEach((prob, index) => {
     const bar = document.createElement('div');
     bar.className = 'chart-bar';
-    bar.style.height = `${(prob / maxProbability) * 100}%`;
+    bar.style.height = `${prob * 100}%`;
     bar.style.left = `${index * 30}px`;
+    // Highlight the predicted bar
     if(index === data.prediction){
       bar.classList.add('active');
     }
+    // Add text label inside the bar
     bar.textContent = `${(prob * 100).toFixed(1)}%`;
     chartContainer.appendChild(bar);
   });
