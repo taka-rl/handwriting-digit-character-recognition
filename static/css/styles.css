@@ -28,9 +28,10 @@ button {
 
 .canvas-page .container {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     margin-top: 50px;
     font-family: Arial, sans-serif;
+    gap: 50px;
 }
 
 .canvas-page button {
@@ -47,6 +48,10 @@ button {
 .canvas-page button:hover {
     background-color: #007bff;
     color: white;
+}
+
+.canvas-page .canvas-section{
+    text-align: center;
 }
 
 /* Results Section Styling */
