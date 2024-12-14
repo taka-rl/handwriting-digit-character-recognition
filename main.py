@@ -6,6 +6,9 @@ import base64
 import io
 
 
+# Load the model globally
+model = models.load_model('./tf_practice/best_model.h5')
+
 app = Flask(__name__)
 
 
@@ -27,8 +30,6 @@ def submit_drawing():
     try:
         if ',' in data:
             header, encoded = data.split(',', 1)
-            print(header)
-            print(encoded)
         else:
             return jsonify({'error': 'Invalid Base64 image format'}), 400
 
@@ -88,7 +89,7 @@ def preprocess_image(image, target_size=(28, 28)):
     """Resize and normalize the image."""
     img = image.resize(target_size)  # Resize image
     img_array = np.array(img) / 255.0  # Convert to numpy array and normalize
-    return img_array[np.newaxis, :, :]  # Add batch dimension
+    return img_array[np.newaxis, :, :]  # Add bathtch dimension
 
 
 def predict_digit(img):
@@ -96,8 +97,6 @@ def predict_digit(img):
     Predict the image
     The model used for the system will be updated.
     """
-    # Load the model
-    model = models.load_model('./tf_practice/best_model.h5')
     return model.predict(img)
 
 
