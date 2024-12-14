@@ -1,6 +1,8 @@
-
-
 Links:
+    Basics of Machine learning:
+       Understanding the Math Behind Deep Neural Networks
+       https://medium.com/@Kiana-Jafari/understanding-the-math-behind-deep-neural-networks-602b7b6a150a
+
     Digits:
         Get Started with Computer Vision by Building a Digit Recognition Model with Tensorflow
         https://medium.com/artificialis/get-started-with-computer-vision-by-building-a-digit-recognition-model-with-tensorflow-b2216823b90a
@@ -17,9 +19,21 @@ Links:
         ゼロからの画像認識②（CNNの理解と実践）
         https://qiita.com/dolce_itf/items/779c78d8254f25a6b670
 
+        Digit Recognition | Building a Deep Neural Network From Scratch
+        https://medium.com/@Kiana-Jafari/digit-recognition-building-a-deep-neural-network-from-scratch-132bd574564a
+
+        Handwritten Digit Recognition: A Beginner’s Guide
+        https://medium.com/@AMustafa4983/handwritten-digit-recognition-a-beginners-guide-638e0995c826
+
+        Handwritten Digit Recognition Web App using html, css and js deployed by github repository
+        https://maneprajakta.github.io/Digit_Recognition_Web_App/
+
     Characters:
         Optical Character Recognition Using TensorFlow
         https://medium.com/analytics-vidhya/optical-character-recognition-using-tensorflow-533061285dd3
 
         Handwritten Text Recognition with TensorFlow
         https://github.com/githubharald/SimpleHTR
+
+        How to Make Real-Time Handwritten Text Recognition With Augmentation and Deep Learning
+        https://sushantgautm.medium.com/how-to-make-real-time-handwritten-text-recognition-with-augmentation-and-deep-learning-9281323d80c1

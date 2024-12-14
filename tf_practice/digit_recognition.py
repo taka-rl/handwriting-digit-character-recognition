@@ -86,6 +86,7 @@ if __name__ == '__main__':
 
     else:
         # If not, build the model
+        print("------ Building a model ------")
         input_shape = x_train.shape[1:]  # Dynamically determine input shape
         model = tf.keras.models.Sequential([
             layers.Input(shape=input_shape),
@@ -107,7 +108,7 @@ if __name__ == '__main__':
 
         model.fit(x_train,
                   y_train,
-                  epochs=10,
+                  epochs=20,
                   batch_size=128,
                   validation_data=(x_test, y_test),  # validation_data=[x_test, y_test] or validation_split=0.2
                   callbacks=callbacks,
