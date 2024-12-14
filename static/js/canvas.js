@@ -87,7 +87,6 @@ function updateResults(data){
 
   predictionElement.textContent = data.prediction;
   confidenceElement.textContent = `Confidence: ${(data.confidence * 100).toFixed(2)}%`;
-  const maxProbability = Math.max(...data.probabilities);
 
   // Clear existing chart
   chartContainer.innerHTML = '';
