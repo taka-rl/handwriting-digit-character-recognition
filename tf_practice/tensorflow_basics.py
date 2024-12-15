@@ -3,6 +3,7 @@ from tensorflow.keras import layers, models
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+import json
 
 
 def plot_image(idx: int, pred) -> None:
@@ -44,7 +45,7 @@ def plot_training_history(histories, labels):
 
 
 def build_dense_model1():
-    """Build a simple Dense Neural Network model"""
+    """Build a Dense Neural Network model"""
     model = tf.keras.models.Sequential([
         layers.Input(x_train.shape[1:]),
         layers.Flatten(),
@@ -58,7 +59,7 @@ def build_dense_model1():
 
 
 def build_dense_model2():
-    """Build a simple Dense Neural Network model"""
+    """Build a Dense Neural Network model"""
     model = tf.keras.models.Sequential([
         layers.Input(x_train.shape[1:]),
         layers.Flatten(),
@@ -75,10 +76,15 @@ def build_dense_model2():
 
 def build_cnn_model1():
     """
-    Build a simple Convolutional Neural Network model
+    Build a Convolutional Neural Network model
 
     The model is based on the following article.
     https://medium.com/@AMustafa4983/handwritten-digit-recognition-a-beginners-guide-638e0995c826
+
+    The model consists of the following layers.
+    Conv2D -> Conv2D -> MaxPool2D -> Dropout -> Conv2D -> Conv2D -> MaxPool2D ->
+        Dropout -> Flatten -> Dense -> Dropout -> Dense
+
     """
     model = tf.keras.models.Sequential([
         tf.keras.layers.Conv2D(32, (5, 5), padding='same', activation='relu', input_shape=(28, 28, 1)),
@@ -97,7 +103,7 @@ def build_cnn_model1():
 
     model.compile(
         optimizer=tf.keras.optimizers.RMSprop(epsilon=1e-08),
-        loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+        loss=tf.keras.losses.SparseCategoricalCrossentropy(),
         metrics=["accuracy"])
 
     return model
@@ -105,11 +111,11 @@ def build_cnn_model1():
 
 def build_cnn_model2():
     """
-    Build a simple Convolutional Neural Network model
+    Build a Convolutional Neural Network model
     The model is based on the following article.
     https://medium.com/artificialis/get-started-with-computer-vision-by-building-a-digit-recognition-model-with-tensorflow-b2216823b90a
 
-    The model follows the TinyVGG architecture,
+    The model follows the TinyVGG architecture.
     Conv2D -> Conv2D -> MaxPool2D -> Conv2D -> Conv2D -> MaxPool2D -> Flatten -> Dense
 
     """
@@ -131,6 +137,43 @@ def build_cnn_model2():
     return model
 
 
+def build_cnn_model3():
+    """
+    Build a Convolutional Neural Network model
+    The model is based on the following GitHub repository.
+    https://github.com/maneprajakta/Digit_Recognition_Web_App
+
+    The model consists of the following layers.
+    Conv2D -> MaxPool2D -> Conv2D -> BatchNormalization -> Conv2D -> BatchNormalization -> Dropout ->
+        Conv2D -> BatchNormalization -> Conv2D -> BatchNormalization -> Conv2D -> BatchNormalization ->
+            Dropout -> Flatten -> Dropout -> Dense
+
+    """
+    model = tf.keras.Sequential([
+        layers.Conv2D(32, kernel_size=3, activation='relu', input_shape=(28, 28, 1)),
+        layers.MaxPooling2D(),
+        layers.Conv2D(32, kernel_size=3, activation='relu'),
+        layers.BatchNormalization(),
+        layers.Conv2D(32, kernel_size=5, strides=2, padding='same', activation='relu'),
+        layers.BatchNormalization(),
+        layers.Dropout(0.4),
+        layers.Conv2D(64, kernel_size=3, activation='relu'),
+        layers.BatchNormalization(),
+        layers.Conv2D(64, kernel_size=3, activation='relu'),
+        layers.BatchNormalization(),
+        layers.Conv2D(64, kernel_size=5, strides=2, padding='same', activation='relu'),
+        layers.BatchNormalization(),
+        layers.Dropout(0.4),
+        layers.Flatten(),
+        layers.Dropout(0.4),
+        layers.Dense(10, activation='softmax')
+    ])
+
+    model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+    return model
+
+
 def train_and_save_model(model_builder, model_path, train_data, val_data, epochs=10, batch_size=128):
     if os.path.isfile(model_path):
         print(f"------ Loading existing model: {model_path} ------")
@@ -141,6 +184,8 @@ def train_and_save_model(model_builder, model_path, train_data, val_data, epochs
         print(f"Training new model: {model_path}")
         history = model.fit(*train_data, epochs=epochs, batch_size=batch_size, validation_data=val_data, verbose=False)
         model.save(model_path)
+        with open(model_path + '.json', 'w') as f:
+            json.dump(history.history, f)
         return model, history
     return model, None
 
@@ -186,7 +231,7 @@ if __name__ == '__main__':
     (x_train, y_train), (x_test, y_test) = mnist.load_data()
 
     # Normalization uint8 -> float32
-    x_train, x_test =  x_train.astype('float32') / 255, x_test.astype('float32') / 255
+    x_train, x_test = x_train.astype('float32') / 255, x_test.astype('float32') / 255
 
     # For CNN models
     x_train_cnn, x_test_cnn = x_train.reshape(x_train.shape + (1,)), x_test.reshape(x_test.shape + (1,))
@@ -218,8 +263,8 @@ if __name__ == '__main__':
     model_cnn1, history_cnn1 = train_and_save_model(
         build_cnn_model1,
         'models/digit_recognizer_cnn1.h5',
-        (x_train, y_train),
-        (x_test, y_test)
+        (x_train_cnn, y_train),
+        (x_test_cnn, y_test)
     )
     # Evaluation
     cnn_test_loss1, cnn_test_acc1 = model_cnn1.evaluate(x_test_cnn, y_test)
@@ -229,11 +274,22 @@ if __name__ == '__main__':
     model_cnn2, history_cnn2 = train_and_save_model(
         build_cnn_model2,
         'models/digit_recognizer_cnn2.h5',
-        (x_train, y_train),
-        (x_test, y_test)
+        (x_train_cnn, y_train),
+        (x_test_cnn, y_test)
     )
     # Evaluation
     cnn_test_loss2, cnn_test_acc2 = model_cnn2.evaluate(x_test_cnn, y_test)
+
+    # -----------------------------------------------------------------------------
+    # CNN model3
+    model_cnn3, history_cnn3 = train_and_save_model(
+        build_cnn_model3,
+        'models/digit_recognizer_cnn3.h5',
+        (x_train_cnn, y_train),
+        (x_test_cnn, y_test)
+    )
+    # Evaluation
+    cnn_test_loss3, cnn_test_acc3 = model_cnn3.evaluate(x_test_cnn, y_test)
 
     # -----------------------------------------------------------------------------
     # Compare performance
@@ -241,10 +297,19 @@ if __name__ == '__main__':
     print(f"Dense Model Test2 Accuracy: {dense_test_acc2:.4f}")
     print(f"CNN Model Test1 Accuracy: {cnn_test_acc1:.4f}")
     print(f"CNN Model Test2 Accuracy: {cnn_test_acc2:.4f}")
+    print(f"CNN Model Test3 Accuracy: {cnn_test_acc3:.4f}")
 
-    if not (history_lr is None, history_mlp is None, history_cnn1 is None, history_cnn2 is None):
-        plot_training_history([history_lr, history_mlp, history_cnn1, history_cnn2],
-                              ["Dense1", "Dense2", "CNN1", "CNN2"])
+    # Plot
+    # Filter out None values and pair them with their labels
+    histories_and_labels = [(history, label) for history, label in zip(
+        [history_lr, history_mlp, history_cnn1, history_cnn2, history_cnn3],
+        ["Dense1", "Dense2", "CNN1", "CNN2", "CNN3"]
+    ) if history is not None]
+
+    # Unzip the filtered pairs back into two separate lists
+    if histories_and_labels:
+        valid_histories, valid_labels = zip(*histories_and_labels)
+        plot_training_history(list(valid_histories), list(valid_labels))
 
     '''
     plt.figure(1)
