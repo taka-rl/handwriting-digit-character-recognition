@@ -1,15 +1,9 @@
 /* styles.css */
 
-#canvas {
-    border: 1px solid black;
-    touch-action: none; /* Disable touch scrolling on the canvas */
-}
-
 .controls {
     margin-top: 10px;
 }
 
-/* Additional styling */
 .container {
     text-align: center;
     margin-top: 50px;
@@ -20,4 +14,90 @@ button {
     padding: 15px 30px;
     font-size: 16px;
     cursor: pointer;
+}
+
+/* Canvas Section Styling */
+.canvas-page #canvas {
+    border: 1px solid black;
+    touch-action: none; /* Disable touch scrolling on the canvas */
+}
+
+.canvas-page .controls {
+    margin-top: 10px;
+}
+
+.canvas-page .container {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+    font-family: Arial, sans-serif;
+    gap: 50px;
+}
+
+.canvas-page button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 14px;
+    border: 2px solid #007bff;
+    background-color: white;
+    color: #007bff;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.canvas-page button:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.canvas-page .canvas-section{
+    text-align: center;
+}
+
+/* Results Section Styling */
+.canvas-page .results-section {
+    text-align: center;
+    width: 300px;
+}
+
+.canvas-page .prediction {
+    font-size: 2em;
+    margin-top: 10px;
+    color: #007bff;
+}
+
+.canvas-page .confidence {
+    margin-top: 10px;
+    font-size: 1.2em;
+    color: #555;
+}
+
+.canvas-page .chart-container {
+    width: 300px;
+    height: 150px;
+    position: relative;
+    margin-top: 20px;
+    border: 1px solid #ddd;
+}
+
+.canvas-page .chart-bar {
+    position: absolute;
+    bottom: 0;
+    width: 25px;
+    background-color: #92bf88;  /* light green for the non-predicted bar*/
+    text-align: center;
+    font-size: 10px;
+    color: white;
+}
+
+.canvas-page .chart-bar.active {
+    background-color: #007bff;  /* blue for the predicted bar */
+}
+
+.canvas-page .chart-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #333;
 }

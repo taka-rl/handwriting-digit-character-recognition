@@ -36,7 +36,7 @@ Links:
 
         Handwritten Digit Recognition Web App using html, css and js deployed by github repository
         https://maneprajakta.github.io/Digit_Recognition_Web_App/
-
+        
     Characters:
         Optical Character Recognition Using TensorFlow
         https://medium.com/analytics-vidhya/optical-character-recognition-using-tensorflow-533061285dd3
