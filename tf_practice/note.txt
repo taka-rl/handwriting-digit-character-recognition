@@ -3,6 +3,15 @@ Links:
        Understanding the Math Behind Deep Neural Networks
        https://medium.com/@Kiana-Jafari/understanding-the-math-behind-deep-neural-networks-602b7b6a150a
 
+       Need Help Getting Started with Applied Machine Learning?
+       https://machinelearningmastery.com/start-here/
+
+       Basics of machine learning with TensorFlow
+       https://www.tensorflow.org/resources/learn-ml/basics-of-machine-learning
+
+       Neural networks from 3blue1brown on YouTube
+       https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi
+
     Digits:
         Get Started with Computer Vision by Building a Digit Recognition Model with Tensorflow
         https://medium.com/artificialis/get-started-with-computer-vision-by-building-a-digit-recognition-model-with-tensorflow-b2216823b90a
@@ -25,6 +34,9 @@ Links:
         Handwritten Digit Recognition: A Beginner’s Guide
         https://medium.com/@AMustafa4983/handwritten-digit-recognition-a-beginners-guide-638e0995c826
 
+        Handwritten Digit Recognition Web App using html, css and js deployed by github repository
+        https://maneprajakta.github.io/Digit_Recognition_Web_App/
+        
     Characters:
         Optical Character Recognition Using TensorFlow
         https://medium.com/analytics-vidhya/optical-character-recognition-using-tensorflow-533061285dd3
