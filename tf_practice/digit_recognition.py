@@ -1,9 +1,9 @@
 from PIL import Image
-from tensorflow.keras import layers, models
 import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
-import os
+from build_models import (train_and_save_model, build_dense_model1,
+                          build_dense_model2, build_cnn_model1, build_cnn_model2, build_cnn_model3)
 
 
 def preprocess_image(img, target_size=(28, 28)):
@@ -38,7 +38,7 @@ def plot_value_array(predictions_array, true_label=None) -> None:
         plot[true_label].set_color('blue')
 
 
-def predict_image(img_path, true_label: int):
+def predict_image(model, img_path, true_label: int):
     try:
         # Load and preprocess the image
         img = Image.open(img_path).convert('L')  # Convert to grayscale
@@ -62,7 +62,6 @@ def predict_image(img_path, true_label: int):
         plt.subplot(1, 3, 3)
         plot_value_array(pred[0], true_label)
         plt.title("Prediction Distribution")
-        plt.show()
 
     except FileNotFoundError:
         print(f"Error: File not found at {img_path}")
@@ -70,67 +69,90 @@ def predict_image(img_path, true_label: int):
         print(f"Unexpected error: {e}")
 
 
-if __name__ == '__main__':
-    # Load MNIST for digit recognition
+def main():
     mnist = tf.keras.datasets.mnist
     (x_train, y_train), (x_test, y_test) = mnist.load_data()
 
-    # Normalization
-    x_train, x_test = x_train / 255, x_test / 255
+    # Normalization uint8 -> float32
+    x_train, x_test = x_train.astype('float32') / 255, x_test.astype('float32') / 255
 
-    # Build the model
-    if os.path.isfile('../tf_practice/best_model.h5'):
-        # Load the existing model
-        print("------ Loading the existing model ------")
-        model = models.load_model('../tf_practice/best_model.h5')
+    # For CNN models
+    x_train_cnn, x_test_cnn = x_train.reshape(x_train.shape + (1,)), x_test.reshape(x_test.shape + (1,))
 
-    else:
-        # If not, build the model
-        print("------ Building a model ------")
-        input_shape = x_train.shape[1:]  # Dynamically determine input shape
-        model = tf.keras.models.Sequential([
-            layers.Input(shape=input_shape),
-            layers.Flatten(),
-            layers.Dense(10, activation='softmax')
-        ])
+    # Load the model
+    # -----------------------------------------------------------------------------
+    # dense model1
+    model_lr, history_lr = train_and_save_model(
+        build_dense_model1,
+        'digit_recognizer_dense1.h5',
+        (x_train, y_train),
+        (x_test, y_test)
+    )
 
-        # Compile the model
-        model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+    # -----------------------------------------------------------------------------
+    # dense model2
+    model_mlp, history_mlp = train_and_save_model(
+        build_dense_model2,
+        'digit_recognizer_dense2.h5',
+        (x_train, y_train),
+        (x_test, y_test)
+    )
 
-        # Show the summary of the model
-        model.summary()
+    # -----------------------------------------------------------------------------
+    # CNN model1
+    model_cnn1, history_cnn1 = train_and_save_model(
+        build_cnn_model1,
+        'digit_recognizer_cnn1.h5',
+        (x_train_cnn, y_train),
+        (x_test_cnn, y_test)
+    )
 
-        # Train the model
-        callbacks = [
-            tf.keras.callbacks.EarlyStopping(patience=3, restore_best_weights=True),
-            tf.keras.callbacks.ModelCheckpoint('best_model.h5', save_best_only=True)
-        ]
+    # -----------------------------------------------------------------------------
+    # CNN model2
+    model_cnn2, history_cnn2 = train_and_save_model(
+        build_cnn_model2,
+        'digit_recognizer_cnn2.h5',
+        (x_train_cnn, y_train),
+        (x_test_cnn, y_test)
+    )
 
-        model.fit(x_train,
-                  y_train,
-                  epochs=20,
-                  batch_size=128,
-                  validation_data=(x_test, y_test),  # validation_data=[x_test, y_test] or validation_split=0.2
-                  callbacks=callbacks,
-                  verbose=False)
+    # -----------------------------------------------------------------------------
+    # CNN model3
+    model_cnn3, history_cnn3 = train_and_save_model(
+        build_cnn_model3,
+        'digit_recognizer_cnn3.h5',
+        (x_train_cnn, y_train),
+        (x_test_cnn, y_test)
+    )
 
-    # Evaluation
-    model.evaluate(x_test, y_test)
+    # -----------------------------------------------------------------------------
+    # Prediction
+    models_dict = {"Dense1": model_lr,
+                   "Dense2": model_mlp,
+                   "CNN1": model_cnn1,
+                   "CNN2": model_cnn2,
+                   "CNN3": model_cnn3}
 
     # Show the prediction result
-    predictions = model.predict(x_test)
-    i: int = 12  # y_test index
-    plt.figure(figsize=(6, 3))
-    plt.subplot(1, 2, 1)
-    plt.title("Input Image")
-    plot_image(i, predictions, x_test, y_test)
-    plt.subplot(1, 2, 2)
-    plt.title("Prediction Distribution")
-    plot_value_array(predictions[i], true_label=y_test[i])
-    plt.tight_layout()
+    for name, model in models_dict.items():
+        predictions = model.predict(x_test)
+        i: int = 12  # y_test index
+        plt.figure(figsize=(6, 3))
+        plt.subplot(1, 2, 1)
+        plt.title("Input Image")
+        plot_image(i, predictions, x_test, y_test)
+        plt.subplot(1, 2, 2)
+        plt.title(f"Prediction Distribution: {name}")
+        plot_value_array(predictions[i], true_label=y_test[i])
+        plt.tight_layout()
     plt.show()
 
     # Predict and display results for external images
     for i in range(3):
-        predict_image(f'../tf_practice/digits/{i}.png', true_label=i)
+        for name, model in models_dict.items():
+            predict_image(model, f'../tf_practice/digits/{i}.png', true_label=i)
     plt.show()
+
+
+if __name__ == '__main__':
+    main()

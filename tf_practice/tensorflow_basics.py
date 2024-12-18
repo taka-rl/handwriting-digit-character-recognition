@@ -1,9 +1,8 @@
 import tensorflow as tf
-from tensorflow.keras import layers, models
 import numpy as np
 import matplotlib.pyplot as plt
-import os
-import json
+from build_models import (train_and_save_model, build_dense_model1,
+                          build_dense_model2, build_cnn_model1, build_cnn_model2, build_cnn_model3)
 
 
 def plot_image(idx: int, pred) -> None:
@@ -38,156 +37,11 @@ def plot_training_history(histories, labels):
         plt.plot(history.history['accuracy'], '--', label=f'{label} Train Accuracy')
     plt.xlabel("Epochs")
     plt.ylabel("Accuracy")
+    plt.ylim([0, 1])
     plt.legend()
     plt.grid()
     plt.title("Model Training Accuracy Comparison")
     plt.show()
-
-
-def build_dense_model1():
-    """Build a Dense Neural Network model"""
-    model = tf.keras.models.Sequential([
-        layers.Input(x_train.shape[1:]),
-        layers.Flatten(),
-        layers.Dense(10, activation='softmax')
-    ])
-
-    # Compile the model
-    model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
-
-    return model
-
-
-def build_dense_model2():
-    """Build a Dense Neural Network model"""
-    model = tf.keras.models.Sequential([
-        layers.Input(x_train.shape[1:]),
-        layers.Flatten(),
-        layers.Dense(64, activation='elu'),
-        layers.Dense(64, activation='elu'),
-        layers.Dense(10, activation='softmax')
-    ])
-
-    # Compile the model
-    model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
-
-    return model
-
-
-def build_cnn_model1():
-    """
-    Build a Convolutional Neural Network model
-
-    The model is based on the following article.
-    https://medium.com/@AMustafa4983/handwritten-digit-recognition-a-beginners-guide-638e0995c826
-
-    The model consists of the following layers.
-    Conv2D -> Conv2D -> MaxPool2D -> Dropout -> Conv2D -> Conv2D -> MaxPool2D ->
-        Dropout -> Flatten -> Dense -> Dropout -> Dense
-
-    """
-    model = tf.keras.models.Sequential([
-        tf.keras.layers.Conv2D(32, (5, 5), padding='same', activation='relu', input_shape=(28, 28, 1)),
-        tf.keras.layers.Conv2D(32, (5, 5), padding='same', activation='relu'),
-        tf.keras.layers.MaxPool2D(),
-        tf.keras.layers.Dropout(0.25),
-        tf.keras.layers.Conv2D(64, (3, 3), padding='same', activation='relu'),
-        tf.keras.layers.Conv2D(64, (3, 3), padding='same', activation='relu'),
-        tf.keras.layers.MaxPool2D(strides=(2, 2)),
-        tf.keras.layers.Dropout(0.25),
-        tf.keras.layers.Flatten(),
-        tf.keras.layers.Dense(128, activation='relu'),
-        tf.keras.layers.Dropout(0.5),
-        tf.keras.layers.Dense(10, activation='softmax')
-    ])
-
-    model.compile(
-        optimizer=tf.keras.optimizers.RMSprop(epsilon=1e-08),
-        loss=tf.keras.losses.SparseCategoricalCrossentropy(),
-        metrics=["accuracy"])
-
-    return model
-
-
-def build_cnn_model2():
-    """
-    Build a Convolutional Neural Network model
-    The model is based on the following article.
-    https://medium.com/artificialis/get-started-with-computer-vision-by-building-a-digit-recognition-model-with-tensorflow-b2216823b90a
-
-    The model follows the TinyVGG architecture.
-    Conv2D -> Conv2D -> MaxPool2D -> Conv2D -> Conv2D -> MaxPool2D -> Flatten -> Dense
-
-    """
-    model = tf.keras.Sequential([
-        layers.Conv2D(filters=10, kernel_size=3, activation="relu", input_shape=(28,  28,  1)),
-        layers.Conv2D(10,  3, activation="relu"),
-        layers.MaxPool2D(),
-        layers.Conv2D(10,  3, activation="relu"),
-        layers.Conv2D(10,  3, activation="relu"),
-        layers.MaxPool2D(),
-        layers.Flatten(),
-        layers.Dense(10, activation="softmax")
-    ])
-
-    model.compile(loss="sparse_categorical_crossentropy",
-                  optimizer=tf.keras.optimizers.Adam(),
-                  metrics=["accuracy"])
-
-    return model
-
-
-def build_cnn_model3():
-    """
-    Build a Convolutional Neural Network model
-    The model is based on the following GitHub repository.
-    https://github.com/maneprajakta/Digit_Recognition_Web_App
-
-    The model consists of the following layers.
-    Conv2D -> MaxPool2D -> Conv2D -> BatchNormalization -> Conv2D -> BatchNormalization -> Dropout ->
-        Conv2D -> BatchNormalization -> Conv2D -> BatchNormalization -> Conv2D -> BatchNormalization ->
-            Dropout -> Flatten -> Dropout -> Dense
-
-    """
-    model = tf.keras.Sequential([
-        layers.Conv2D(32, kernel_size=3, activation='relu', input_shape=(28, 28, 1)),
-        layers.MaxPooling2D(),
-        layers.Conv2D(32, kernel_size=3, activation='relu'),
-        layers.BatchNormalization(),
-        layers.Conv2D(32, kernel_size=5, strides=2, padding='same', activation='relu'),
-        layers.BatchNormalization(),
-        layers.Dropout(0.4),
-        layers.Conv2D(64, kernel_size=3, activation='relu'),
-        layers.BatchNormalization(),
-        layers.Conv2D(64, kernel_size=3, activation='relu'),
-        layers.BatchNormalization(),
-        layers.Conv2D(64, kernel_size=5, strides=2, padding='same', activation='relu'),
-        layers.BatchNormalization(),
-        layers.Dropout(0.4),
-        layers.Flatten(),
-        layers.Dropout(0.4),
-        layers.Dense(10, activation='softmax')
-    ])
-
-    model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-
-    return model
-
-
-def train_and_save_model(model_builder, model_path, train_data, val_data, epochs=10, batch_size=128):
-    if os.path.isfile(model_path):
-        print(f"------ Loading existing model: {model_path} ------")
-        model = models.load_model(model_path)
-    else:
-        model = model_builder()
-        model.summary()
-        print(f"Training new model: {model_path}")
-        history = model.fit(*train_data, epochs=epochs, batch_size=batch_size, validation_data=val_data, verbose=False)
-        model.save(model_path)
-        with open(model_path + '.json', 'w') as f:
-            json.dump(history.history, f)
-        return model, history
-    return model, None
 
 
 if __name__ == '__main__':
@@ -225,7 +79,6 @@ if __name__ == '__main__':
     validation_data=[x_test, y_test] or validation_split=0.2
     
     '''
-
     # Load MNIST for digit recognition
     mnist = tf.keras.datasets.mnist
     (x_train, y_train), (x_test, y_test) = mnist.load_data()
@@ -240,7 +93,7 @@ if __name__ == '__main__':
     # dense model1
     model_lr, history_lr = train_and_save_model(
         build_dense_model1,
-        'models/digit_recognizer_dense1.h5',
+        'digit_recognizer_dense1.h5',
         (x_train, y_train),
         (x_test, y_test)
     )
@@ -251,7 +104,7 @@ if __name__ == '__main__':
     # dense model2
     model_mlp, history_mlp = train_and_save_model(
         build_dense_model2,
-        'models/digit_recognizer_dense2.h5',
+        'digit_recognizer_dense2.h5',
         (x_train, y_train),
         (x_test, y_test)
     )
@@ -262,7 +115,7 @@ if __name__ == '__main__':
     # CNN model1
     model_cnn1, history_cnn1 = train_and_save_model(
         build_cnn_model1,
-        'models/digit_recognizer_cnn1.h5',
+        'digit_recognizer_cnn1.h5',
         (x_train_cnn, y_train),
         (x_test_cnn, y_test)
     )
@@ -273,7 +126,7 @@ if __name__ == '__main__':
     # CNN model2
     model_cnn2, history_cnn2 = train_and_save_model(
         build_cnn_model2,
-        'models/digit_recognizer_cnn2.h5',
+        'digit_recognizer_cnn2.h5',
         (x_train_cnn, y_train),
         (x_test_cnn, y_test)
     )
@@ -284,7 +137,7 @@ if __name__ == '__main__':
     # CNN model3
     model_cnn3, history_cnn3 = train_and_save_model(
         build_cnn_model3,
-        'models/digit_recognizer_cnn3.h5',
+        'digit_recognizer_cnn3.h5',
         (x_train_cnn, y_train),
         (x_test_cnn, y_test)
     )
