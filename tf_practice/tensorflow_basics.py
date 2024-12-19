@@ -46,6 +46,28 @@ def plot_training_history(histories, labels):
 
 if __name__ == '__main__':
     '''
+    The basic procedure of TensorFlow is as follows:
+    1: Prepare a dataset(MNIST for digit)
+        Load the dataset
+        Normalize the dataset
+        
+    * If you load a model, load the model instead of 2 and 3 steps
+    * Load a model 
+        model = models.load_model(model_path)
+        
+    2: Build a model
+        Choose a model type such as fully connected and CNN
+        Create a model by using the following code
+            model = tf.keras.Sequential([
+                layers.Input, layers.Flatten, layers.Conv2D and so on
+    3: Train the model
+        history = model.fit()
+    4: Save the model and the training result as a JSON file
+        model.save() for the model
+        with open(model_path + '.json', 'w') as f: # for the training result 
+            json.dump(history.history, f)
+    5: Plot the training result with Matplotlib and Evaluation the model   
+    
     About the MNIST dataset: 
         It contains two sets such as a dataset including 60000 28x28 grayscale images of the 10 digits(0-9)
         and a test set including 10000 images.
@@ -77,6 +99,7 @@ if __name__ == '__main__':
     About training a model
     y_onehot_train = tf.one_hot(y_train, 10)  # if you use loss='categorical_crossentropy
     validation_data=[x_test, y_test] or validation_split=0.2
+    
     
     '''
     # Load MNIST for digit recognition
