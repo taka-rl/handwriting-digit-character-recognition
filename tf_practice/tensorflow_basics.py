@@ -1,33 +1,7 @@
 import tensorflow as tf
-import numpy as np
 import matplotlib.pyplot as plt
 from build_models import (train_and_save_model, build_dense_model1,
                           build_dense_model2, build_cnn_model1, build_cnn_model2, build_cnn_model3)
-
-
-def plot_image(idx: int, pred) -> None:
-    prediction, true_label, img = np.argmax(pred[idx]), y_test[idx], x_test[idx]
-    plt.grid(False)
-    plt.xticks([])
-    plt.yticks([])
-    plt.imshow(x_test[idx], cmap='gray')
-
-    color = 'blue' if prediction == true_label else 'red'  # blue if correct, otherwise, red
-
-    plt.xlabel(f'pred:{prediction}, {100*np.max(pred[idx]):.2f}% (true:{true_label}', color=color)
-
-
-def plot_value_array(idx: int, pred) -> None:
-    predictions_array, true_label = pred[idx], y_test[idx]
-    plt.grid(False)
-    plt.xticks([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
-    plt.yticks([])
-    plot = plt.bar(range(10), predictions_array, color="#777777")
-    plt.ylim([0, 1])
-    predicted_label = np.argmax(predictions_array)
-
-    plot[predicted_label].set_color('red')
-    plot[true_label].set_color('blue')
 
 
 def plot_training_history(histories, labels):
@@ -186,31 +160,3 @@ if __name__ == '__main__':
     if histories_and_labels:
         valid_histories, valid_labels = zip(*histories_and_labels)
         plot_training_history(list(valid_histories), list(valid_labels))
-
-    '''
-    plt.figure(1)
-    plt.plot(history_lr.history['loss'], label='train')
-    plt.plot(history_lr.history['val_loss'], label='val')
-    plt.ylabel('loss')
-    plt.legend()
-
-    plt.figure(2)
-    plt.plot(history_lr.history['accuracy'], label='train')
-    plt.plot(history_lr.history['val_accuracy'], label='val')
-    plt.ylabel('accuracy')
-    plt.legend()
-    plt.show()
-
-    # evaluation
-    model_lr.evaluate(x_test, y_test)
-
-    # Display the prediction result
-    predictions = model_lr.predict(x_test)
-    i: int = 12
-    plt.figure(figsize=(6, 3))
-    plt.subplot(1, 2, 1)
-    plot_image(i)
-    plt.subplot(1, 2, 2)
-    plot_value_array(i)
-    plt.show()
-    '''
