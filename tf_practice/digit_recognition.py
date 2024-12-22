@@ -6,67 +6,91 @@ from build_models import (train_and_save_model, build_dense_model1,
                           build_dense_model2, build_cnn_model1, build_cnn_model2, build_cnn_model3)
 
 
-def preprocess_image(img, target_size=(28, 28)):
+def preprocess_image(img: Image.Image, target_size=(28, 28)) -> np.ndarray:
+    """
+    Preprocess the input image: resize, normalize, and add batch dimension.
+
+    Parameters:
+        img (PIL.Image.Image): Input image to preprocess.
+        target_size (tuple): Target size for resizing (width, height).
+
+    Returns:
+        np.ndarray: Preprocessed image ready for the model.
+    """
     img = img.resize(target_size)  # Resize image
     img_array = np.array(img) / 255.0  # Convert to numpy array and normalize
     return img_array[np.newaxis, :, :]  # Add batch dimension
 
 
-def plot_image(idx: int, predictions, x_test, y_test) -> None:
-    prediction, true_label, img = np.argmax(predictions[idx]), y_test[idx], x_test[idx]
-    plt.grid(False)
-    plt.xticks([])
-    plt.yticks([])
-    plt.imshow(x_test[idx], cmap='gray')
-
-    color = 'blue' if prediction == true_label else 'red'  # blue if correct, otherwise, red
-    confidence = 100 * np.max(predictions[idx])
-
-    plt.xlabel(f'Pred: {prediction}, {confidence:.2f}% (True: {true_label}', color=color)
+def reshape_for_cnn(data: np.ndarray) -> np.ndarray:
+    return data.reshape(data.shape + (1,))
 
 
-def plot_value_array(predictions_array, true_label=None) -> None:
-    plt.grid(False)
-    plt.xticks(range(10))
-    plt.yticks([])
-    plot = plt.bar(range(10), predictions_array, color="#777777")
-    plt.ylim([0, 1])
-
-    predicted_label = np.argmax(predictions_array)
-    plot[predicted_label].set_color('red')
-    if true_label is not None:
-        plot[true_label].set_color('blue')
+@tf.function
+def predict_image(model, x_test):
+    """
+    Get predictions for the input data (decorated with tf.function to prevent retracing).
+    """
+    return model(x_test, training=False)
 
 
-def predict_image(model, img_path, true_label: int):
-    try:
-        # Load and preprocess the image
-        img = Image.open(img_path).convert('L')  # Convert to grayscale
-        img_array = preprocess_image(img)
+def predict_and_plot(model, model_name, data, labels, idx):
+    """Predict and plot results for a given model."""
+    create_prediction_plot(model, model_name, x_test=data, y_test=labels, idx=idx)
 
-        # Prediction
-        pred = model.predict(img_array)
 
-        # Visualization
-        plt.figure(figsize=(10, 3))
-        plt.subplot(1, 3, 1)
-        plt.imshow(img, cmap='gray')
-        plt.title("Original Image")
-        plt.axis('off')
+def create_prediction_plot(model, model_name, x_test, y_test, idx) -> None:
+    """
+    Create a prediction plot including the specific input image placed on the left side of the plot,
+    the prediction result and the distribution bar chart placed on the right sice of the plot.
 
-        plt.subplot(1, 3, 2)
-        plt.imshow(img_array[0], cmap='gray')
-        plt.title("Resized Image")
-        plt.axis('off')
+    Parameters:
+        model: The trained TensorFlow/Keras model for predictions.
+        model_name (str): The name of the model.
+        x_test (np.ndarray): Test images.
+        y_test (np.ndarray or int): True labels corresponding to `x_test`.
+        idx (int or None): Index of the test image. If `None`, the input is treated as a single image.
+    """
+    # Predict
+    predictions = predict_image(model, x_test)
 
-        plt.subplot(1, 3, 3)
-        plot_value_array(pred[0], true_label)
-        plt.title("Prediction Distribution")
+    # Get the result
+    if idx is None:
+        prediction, confidence, img = np.argmax(predictions[0]), 100 * np.max(predictions[0]), x_test[0]
+        true_label = y_test
+    else:
+        prediction, confidence, img = np.argmax(predictions[idx]), 100 * np.max(predictions[idx]), x_test[idx]
+        true_label = y_test[idx]
 
-    except FileNotFoundError:
-        print(f"Error: File not found at {img_path}")
-    except Exception as e:
-        print(f"Unexpected error: {e}")
+    # Set the plot size
+    fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(12, 5))
+    fig.suptitle(f'Input image and prediction result', fontsize=16)
+
+    # Create a plot for the input image
+    axes[0].set_title('Input Image', fontsize=10)
+    axes[0].grid(False)
+    axes[0].imshow(img, cmap='gray')
+    axes[0].axis('off')
+
+    # Create a plot for the prediction result
+    axes[1].set_title(f'{model_name}: Prediction Distribution\n'
+                      f'Prediction: {prediction}, {confidence:.2f}% (True: {true_label})', fontsize=12)
+    axes[1].grid(False)
+    if idx is None:
+        axes[1].bar(range(10), predictions[0], color="#777777")
+    else:
+        axes[1].bar(range(10), predictions[idx], color="#777777")
+    axes[1].set_ylim([0, 1])
+
+    # Highlight the bar chart with blue if the prediction is correct
+    axes[1].patches[prediction].set_facecolor('red')
+    if true_label == prediction:
+        axes[1].patches[prediction].set_facecolor('blue')
+
+    # Adjust the plot
+    plt.tight_layout(rect=[0, 0, 1, 0.95])
+
+    plt.show()
 
 
 def main():
@@ -77,7 +101,7 @@ def main():
     x_train, x_test = x_train.astype('float32') / 255, x_test.astype('float32') / 255
 
     # For CNN models
-    x_train_cnn, x_test_cnn = x_train.reshape(x_train.shape + (1,)), x_test.reshape(x_test.shape + (1,))
+    x_train_cnn, x_test_cnn = reshape_for_cnn(x_train), reshape_for_cnn(x_test)
 
     # Load the model
     # -----------------------------------------------------------------------------
@@ -127,31 +151,38 @@ def main():
 
     # -----------------------------------------------------------------------------
     # Prediction
-    models_dict = {"Dense1": model_lr,
-                   "Dense2": model_mlp,
-                   "CNN1": model_cnn1,
-                   "CNN2": model_cnn2,
-                   "CNN3": model_cnn3}
+    models_dense_dict = {"Dense1": model_lr, "Dense2": model_mlp}
+    models_cnn_dict = {"CNN1": model_cnn1, "CNN2": model_cnn2, "CNN3": model_cnn3}
+    models_dict = {"Dense1": model_lr, "Dense2": model_mlp, "CNN1": model_cnn1, "CNN2": model_cnn2, "CNN3": model_cnn3}
 
-    # Show the prediction result
-    for name, model in models_dict.items():
-        predictions = model.predict(x_test)
-        i: int = 12  # y_test index
-        plt.figure(figsize=(6, 3))
-        plt.subplot(1, 2, 1)
-        plt.title("Input Image")
-        plot_image(i, predictions, x_test, y_test)
-        plt.subplot(1, 2, 2)
-        plt.title(f"Prediction Distribution: {name}")
-        plot_value_array(predictions[i], true_label=y_test[i])
-        plt.tight_layout()
-    plt.show()
-
-    # Predict and display results for external images
+    # Plot the test image from MNIST and the prediction result (each)
+    '''
+    for model_name, model in models_dense_dict.items():
+        predict_and_plot(model, model_name, x_test, y_test, idx=12)
+    for model_name, model in models_cnn_dict.items():
+        predict_and_plot(model, model_name, x_test_cnn, y_test, idx=12)
+    '''
+    # Plot the test image created by myself and the prediction result
     for i in range(3):
-        for name, model in models_dict.items():
-            predict_image(model, f'../tf_practice/digits/{i}.png', true_label=i)
-    plt.show()
+        for model_name, model in models_dict.items():
+            try:
+                img_path = f'../tf_practice/digits/{i}.png'
+                true_label = i
+
+                # Load and preprocess the image
+                img = Image.open(img_path).convert('L')  # Convert to grayscale
+                img_array = preprocess_image(img)
+
+                # Reshape the data if the model is CNN
+                img_array = reshape_for_cnn(img_array) if 'CNN' in model_name else img_array
+
+                # Predict and plot
+                predict_and_plot(model, model_name, img_array, true_label, idx=None)
+
+            except FileNotFoundError:
+                print(f"Error: File not found at {img_path}")
+            except Exception as e:
+                print(f"Unexpected error: {e}")
 
 
 if __name__ == '__main__':
