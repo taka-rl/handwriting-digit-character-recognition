@@ -5,7 +5,21 @@ import json
 
 
 def build_dense_model1():
-    """Build a Dense Neural Network model"""
+    """
+    Build a Dense Neural Network model
+
+    The model consists of the following layers.
+    Input -> Flatten -> Dense
+
+    Here’s a breakdown of the architecture:
+        Flatten Layer:
+            The Flatten layer converts the 2D image (28x28) into a 1D vector (784 elements).
+            Dense layers require 1D input.
+        Dense Layer:
+            The Dense layer has 10 neurons to represent each digit class (0-9).
+            Softmax is often used as the activation for the last layer of a classification network
+            as it can produce a probability distribution as the result.
+    """
     model = tf.keras.models.Sequential([
         layers.Input(input_shape=(28, 28)),
         layers.Flatten(),
@@ -19,7 +33,27 @@ def build_dense_model1():
 
 
 def build_dense_model2():
-    """Build a Dense Neural Network model"""
+    """
+    Build a Dense Neural Network model
+
+    The model consists of the following layers.
+    Input -> Flatten -> Dense -> Dense -> Dense
+
+    Here’s a breakdown of the architecture:
+        Flatten Layer:
+            The Flatten layer converts the 2D image (28x28) into a 1D vector (784 elements).
+            Dense layers require 1D input.
+
+        Two Hidden Layers (Dense Layers):
+            They are fully connected layers with 64 neurons.
+            elu, which stands for Exponential Liner Unit and represents the following equations.
+                f(x) = x if x > 0, alpha * (exp(x) - 1) if x < 0
+
+        Dense Layer:
+            The Dense layer has 10 neurons to represent each digit class (0-9).
+            Softmax is often used as the activation for the last layer of a classification network
+            as it can produce a probability distribution as the result.
+    """
     model = tf.keras.models.Sequential([
         layers.Input(input_shape=(28, 28)),
         layers.Flatten(),
@@ -134,7 +168,10 @@ def build_cnn_model3():
     return model
 
 
-def train_and_save_model(model_builder, model_name, train_data, val_data, epochs=10, batch_size=128):
+def train_or_load_model(model_builder, model_name, train_data, val_data, epochs=10, batch_size=128):
+    """
+    Train a model and save the model as .h5 the training result as JSON file, or load a model if the model exists.
+    """
     model_path = os.path.join('models', model_name)
     if os.path.isfile(model_path):
         print(f"------ Loading existing model: {model_path} ------")
