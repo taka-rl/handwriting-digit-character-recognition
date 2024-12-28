@@ -175,7 +175,7 @@ def train_or_load_model(model_builder, model_name, train_data, val_data, epochs=
     model_path = os.path.join('models', model_name)
     if os.path.isfile(model_path):
         print(f"------ Loading existing model: {model_path} ------")
-        model = models.load_model(model_path)
+        model = models.load_model(model_path, compile=False)
     else:
         model = model_builder()
         model.summary()
