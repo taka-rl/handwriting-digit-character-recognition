@@ -172,7 +172,7 @@ def train_or_load_model(model_builder, model_name, train_data, val_data, epochs=
     """
     Train a model and save the model as .h5 the training result as JSON file, or load a model if the model exists.
     """
-    model_path = os.path.join('models', model_name)
+    model_path = os.path.join('digits/models', model_name)
     if os.path.isfile(model_path):
         print(f"------ Loading existing model: {model_path} ------")
         model = models.load_model(model_path, compile=False)

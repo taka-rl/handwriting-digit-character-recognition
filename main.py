@@ -7,7 +7,7 @@ import io
 
 
 # Load the model globally
-model = models.load_model('./tf_practice/best_model.h5')
+model = models.load_model('./tf_practice/best_model_digit.h5')
 
 app = Flask(__name__)
 
@@ -40,6 +40,9 @@ def submit_drawing():
         image = Image.open(io.BytesIO(image_data)).convert('L')
         processed_image = preprocess_image(image)
 
+        # Reshape for CNN
+        processed_image = reshape_for_cnn(processed_image)
+
         # Predict the image
         predictions = predict_digit(processed_image)
 
@@ -70,6 +73,9 @@ def upload_picture():
         image = Image.open(file).convert('L')  # Convert to grayscale
         processed_image = preprocess_image(image)
 
+        # Reshape for CNN
+        processed_image = reshape_for_cnn(processed_image)
+
         # Predict the image
         predictions = predict_digit(processed_image)
 
@@ -83,6 +89,10 @@ def upload_picture():
                         })
     else:
         return jsonify({"error": "No file uploaded"}), 400
+
+
+def reshape_for_cnn(data: np.ndarray) -> np.ndarray:
+    return data.reshape(data.shape + (1,))
 
 
 def preprocess_image(image, target_size=(28, 28)):
