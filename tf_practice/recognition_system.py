@@ -1,5 +1,6 @@
 from PIL import Image
 import numpy as np
+import tensorflow as tf
 
 
 class RecognitionSystem:
@@ -7,22 +8,54 @@ class RecognitionSystem:
         pass
 
     @staticmethod
-    def preprocess_dataset(dataset: tuple[np.ndarray, np.ndarray]):
+    def preprocess_mnist(dataset: tuple[np.ndarray, np.ndarray]):
         """
-        Preprocess the dataset: normalize images.
+        Preprocess the MNIST dataset: normalize images.
 
         Parameters:
             dataset: tuple[np.ndarray, np.ndarray] -> (x_train, y_train)
-            Ex. (x_train, y_train), (x_test, y_test) = mnist.load_data()
+                Ex. (x_train, y_train), (x_test, y_test) = mnist.load_data()
 
         Returns:
             dataset: Normalized dataset with each label
 
         """
-
         # Normalization uint8 -> float32
         dataset, label = dataset
         return dataset.astype('float32') / 255, label
+
+    @staticmethod
+    def preprocess_image_and_label(image, label):
+        """
+        Normalize the image and shift labels from [1, 26] to [0, 25].
+        """
+        image = image / 255  # Normalize the image
+        label = label - 1  # Shift labels to start from 0
+        return image, label
+
+    @staticmethod
+    def preprocess_emnist(dataset: tf.data.Dataset, cnn=False):
+        """
+        Preprocess the EMNIST dataset: normalize images and shift labels.
+
+        Parameters:
+            dataset: The `tf.data.Dataset` object.
+            cnn: Whether to reshape the data for CNN models.
+
+        Returns:
+            Preprocessed `tf.data.Dataset` object.
+
+        """
+        def preprocess_cnn(image, label):
+            # Add a dimension
+            image = tf.expand_dims(image, axis=-1)
+            return image, label
+
+        # Normalization uint8 -> float32 and Shift labels to start from 0
+        dataset = dataset.map(RecognitionSystem.preprocess_image_and_label)
+        if cnn:
+            dataset = dataset.map(preprocess_cnn)
+        return dataset
 
     @staticmethod
     def preprocess_image(img: Image.Image, target_size: tuple[int, int] = (28, 28)) -> np.ndarray:

@@ -5,8 +5,8 @@ import os
 
 def main():
     # Initialization
-    model_path = '../tf_practice/digits/models/digit_recognizer_cnn3.h5'
-    model = Model(dataset_name="mnist", model_type="CNN", epochs=5)
+    model_path = '../tf_practice/digits/models/digit_recognizer_cnn4.h5'
+    model = Model(dataset_name="emnist", model_type="CNN", epochs=5)
     recognition_system = RecognitionSystem()
 
     # Load a model
@@ -17,8 +17,16 @@ def main():
         # if the model doesn't exist
         print('Load and preprocess dataset')
         model.load_dataset()
-        model.train_data = recognition_system.preprocess_dataset(model.train_data)
-        model.test_data = recognition_system.preprocess_dataset(model.test_data)
+        if model.dataset_name == 'mnist':
+            model.train_data = recognition_system.preprocess_mnist(model.train_data)
+            model.test_data = recognition_system.preprocess_mnist(model.test_data)
+            if model.model_type == 'cnn':
+                model.train_data = recognition_system.reshape_for_cnn(model.train_data)
+                model.test_data = recognition_system.reshape_for_cnn(model.test_data)
+
+        elif model.dataset_name == 'emnist':
+            model.train_data = recognition_system.preprocess_emnist(model.train_data, cnn=(model.model_type == 'CNN'))
+            model.test_data = recognition_system.preprocess_emnist(model.test_data, cnn=(model.model_type == 'CNN'))
 
         print('Build a model')
         model.build_model()

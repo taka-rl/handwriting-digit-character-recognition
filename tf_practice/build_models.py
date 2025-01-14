@@ -26,9 +26,6 @@ def build_dense_model1():
         layers.Dense(10, activation='softmax')
     ])
 
-    # Compile the model
-    model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
-
     return model
 
 
@@ -62,9 +59,6 @@ def build_dense_model2():
         layers.Dense(10, activation='softmax')
     ])
 
-    # Compile the model
-    model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
-
     return model
 
 
@@ -95,11 +89,6 @@ def build_cnn_model1():
         tf.keras.layers.Dense(10, activation='softmax')
     ])
 
-    model.compile(
-        optimizer=tf.keras.optimizers.RMSprop(epsilon=1e-08),
-        loss=tf.keras.losses.SparseCategoricalCrossentropy(),
-        metrics=["accuracy"])
-
     return model
 
 
@@ -123,10 +112,6 @@ def build_cnn_model2():
         layers.Flatten(),
         layers.Dense(10, activation="softmax")
     ])
-
-    model.compile(loss="sparse_categorical_crossentropy",
-                  optimizer=tf.keras.optimizers.Adam(),
-                  metrics=["accuracy"])
 
     return model
 
@@ -160,10 +145,8 @@ def build_cnn_model3():
         layers.Dropout(0.4),
         layers.Flatten(),
         layers.Dropout(0.4),
-        layers.Dense(10, activation='softmax')
+        layers.Dense(26, activation='softmax')
     ])
-
-    model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
     return model
 
@@ -179,6 +162,8 @@ def train_or_load_model(model_builder, model_name, train_data, val_data, epochs=
     else:
         model = model_builder()
         model.summary()
+        print("Compiling new model")
+        model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
         print(f"Training new model: {model_path}")
         history = model.fit(*train_data, epochs=epochs, batch_size=batch_size, validation_data=val_data, verbose=False)
         model.save(model_path)

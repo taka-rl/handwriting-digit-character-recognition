@@ -38,21 +38,41 @@ class Model:
             self.test_data = test_data
 
     def build_model(self) -> None:
-        if self.model_type == 'DNN':
-            self.model = build_dense_model2()
+        if self.dataset_name == 'mnist':
+            if self.model_type == 'DNN':
+                self.model = build_dense_model2()
+            elif self.model_type == 'CNN':
+                self.model = build_cnn_model3()
 
-        elif self.model_type == 'CNN':
-            self.model = build_cnn_model3()
+        elif self.dataset_name == 'emnist':
+            if self.model_type == 'DNN':
+                self.model = build_dense_model2()
+            elif self.model_type == 'CNN':
+                self.model = build_cnn_model3()
 
     def compile_model(self) -> None:
         self.model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
     def train_model(self):
-        history = self.model.fit(*self.train_data,
-                                 epochs=self.epochs,
-                                 batch_size=self.batch_size,
-                                 validation_split=0.2,
-                                 verbose=False)
+        """
+        Train the model based on the dataset type
+        Returns:
+            Training history
+        """
+        if isinstance(self.train_data, tf.data.Dataset):
+            # For TensorFlow Datasets (e.g., EMNIST)
+            history = self.model.fit(
+                self.train_data.batch(self.batch_size),
+                validation_data=self.test_data.batch(self.batch_size),
+                epochs=self.epochs,
+                verbose=1
+            )
+        else:
+            history = self.model.fit(*self.train_data,
+                                     epochs=self.epochs,
+                                     batch_size=self.batch_size,
+                                     validation_split=0.2,
+                                     verbose=False)
         return history
 
     def load_model(self, model_path: str) -> None:
