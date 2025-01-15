@@ -1,6 +1,5 @@
 from PIL import Image
 import numpy as np
-import tensorflow as tf
 
 
 class RecognitionSystem:
@@ -20,42 +19,31 @@ class RecognitionSystem:
             dataset: Normalized dataset with each label
 
         """
+        # Split dataset into data and label
+        data, label = dataset
         # Normalization uint8 -> float32
-        dataset, label = dataset
-        return dataset.astype('float32') / 255, label
+        return data.astype('float32') / 255.0, label
 
     @staticmethod
-    def preprocess_image_and_label(image, label):
+    def preprocess_emnist(dataset: tuple[np.ndarray, np.ndarray]):
         """
-        Normalize the image and shift labels from [1, 26] to [0, 25].
-        """
-        image = image / 255  # Normalize the image
-        label = label - 1  # Shift labels to start from 0
-        return image, label
-
-    @staticmethod
-    def preprocess_emnist(dataset: tf.data.Dataset, cnn=False):
-        """
-        Preprocess the EMNIST dataset: normalize images and shift labels.
+        Preprocess EMNIST data by normalizing images and shifting labels from [1, 26] to [0, 25].
 
         Parameters:
-            dataset: The `tf.data.Dataset` object.
-            cnn: Whether to reshape the data for CNN models.
+            dataset: tuple[np.ndarray, np.ndarray]
 
         Returns:
-            Preprocessed `tf.data.Dataset` object.
-
+            dataset: Normalized dataset with shifted labels
         """
-        def preprocess_cnn(image, label):
-            # Add a dimension
-            image = tf.expand_dims(image, axis=-1)
-            return image, label
+        # Split dataset into data and label
+        data, label = dataset
 
-        # Normalization uint8 -> float32 and Shift labels to start from 0
-        dataset = dataset.map(RecognitionSystem.preprocess_image_and_label)
-        if cnn:
-            dataset = dataset.map(preprocess_cnn)
-        return dataset
+        # Create a writable copy of the label array
+        label = np.copy(label)
+        np.subtract(label, 1, out=label)
+
+        # Normalization uint8 -> float32
+        return data.astype('float32') / 255.0, label
 
     @staticmethod
     def preprocess_image(img: Image.Image, target_size: tuple[int, int] = (28, 28)) -> np.ndarray:
@@ -74,17 +62,19 @@ class RecognitionSystem:
         return img_array[np.newaxis, :, :]  # Add batch dimension
 
     @staticmethod
-    def reshape_for_cnn(data: np.ndarray) -> np.ndarray:
+    def reshape_for_cnn(dataset: np.ndarray) -> np.ndarray:
         """
         Reshape the data for CNN models
 
         Parameters:
-            data: data to reshape
+            dataset: data to reshape
 
         Returns:
             np.ndarray: The reshaped data for CNN models
         """
-        return data.reshape(data.shape + (1,))
+        # Split dataset into data and label
+        data, label = dataset
+        return data.reshape(data.shape + (1,)), label
 
     @staticmethod
     def import_image(img_path: str) -> np.ndarray:
