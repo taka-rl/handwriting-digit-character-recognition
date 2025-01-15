@@ -7,8 +7,13 @@ from tf_practice.build_models import build_dense_model2, build_cnn_model3
 
 
 class Model:
-    def __init__(self, dataset_name: str, model_type: str, epochs: int = 10, batch_size: int = 128) -> None:
+    def __init__(self, dataset_name: str,
+                 model_type: str,
+                 epochs: int = 10,
+                 batch_size: int = 128,
+                 model_builder=None) -> None:
         self.dataset_name = dataset_name
+        self.model_builder = model_builder
         self.model_type = model_type
         self.epochs = epochs
         self.batch_size = batch_size
@@ -32,17 +37,24 @@ class Model:
             self.test_data = (x_test, y_test)
 
     def build_model(self) -> None:
-        if self.dataset_name == 'mnist':
-            if self.model_type == 'DNN':
-                self.model = build_dense_model2(num_classes=10)
-            elif self.model_type == 'CNN':
-                self.model = build_cnn_model3(num_classes=10)
+        if self.model_builder is None:
+            if self.model_type == 'CNN':
+                if self.dataset_name == 'mnist':
+                    self.model = build_cnn_model3(num_classes=10)
+                elif self.dataset_name == 'emnist':
+                    self.model = build_cnn_model3(num_classes=26)
+            elif self.model_type == 'DNN':
+                if self.dataset_name == 'mnist':
+                    self.model = build_dense_model2(num_classes=10)
+                elif self.dataset_name == 'emnist':
+                    self.model = build_dense_model2(num_classes=26)
 
-        elif self.dataset_name == 'emnist':
-            if self.model_type == 'DNN':
-                self.model = build_dense_model2(num_classes=26)
-            elif self.model_type == 'CNN':
-                self.model = build_cnn_model3(num_classes=26)
+        else:
+            if self.dataset_name == 'mnist':
+                self.model = self.model_builder(num_classes=10)
+
+            elif self.dataset_name == 'emnist':
+                self.model = self.model_builder(num_classes=26)
 
     def compile_model(self) -> None:
         self.model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
