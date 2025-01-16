@@ -3,7 +3,7 @@ from tensorflow.keras import models
 from emnist import extract_training_samples, extract_test_samples
 import json
 import numpy as np
-from tf_practice.build_models import build_dense_model2, build_cnn_model3
+from tf_practice.src.build_models import build_dense_model2, build_cnn_model3
 
 
 class Model:

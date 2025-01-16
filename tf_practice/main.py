@@ -1,5 +1,5 @@
-from recognition_system import RecognitionSystem
-from model import Model
+from tf_practice.src.recognition_system import RecognitionSystem
+from tf_practice.src.model import Model
 import os
 
 

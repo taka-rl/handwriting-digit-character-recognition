@@ -1,7 +1,7 @@
 import tensorflow as tf
 import matplotlib.pyplot as plt
-from build_models import (train_or_load_model, build_dense_model1,
-                          build_dense_model2, build_cnn_model1, build_cnn_model2, build_cnn_model3)
+from tf_practice.src.build_models import (train_or_load_model, build_dense_model1,
+                                          build_dense_model2, build_cnn_model1, build_cnn_model2, build_cnn_model3)
 
 
 def plot_training_history(histories, labels):

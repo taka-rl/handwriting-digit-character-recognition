@@ -38,8 +38,20 @@ Links:
         https://maneprajakta.github.io/Digit_Recognition_Web_App/
         
     Characters:
+        Handwritten Character Recognition Web App with EMNIST
+        https://guptapurav.medium.com/handwritten-character-recognition-web-app-with-emnist-9af77d895a52
+
+        EMNIST-Classifier
+        https://github.com/XavierSpycy/EMNIST-Classifier
+
         Optical Character Recognition Using TensorFlow
         https://medium.com/analytics-vidhya/optical-character-recognition-using-tensorflow-533061285dd3
+
+        mnistの進化系データセットemnist
+        https://kumitatepazuru.hatenablog.com/entry/2020/07/25/mnist%E3%81%AE%E9%80%B2%E5%8C%96%E7%B3%BB%E3%83%87%E3%83%BC%E3%82%BF%E3%82%BB%E3%83%83%E3%83%88emnist
+
+        Deep Learning and EMNIST: How to use a Convolutional Neural Network for image recognition
+        https://medium.com/@mspeciale/deep-learning-and-emnist-how-to-use-a-convolutional-neural-network-for-image-recognition-81acbcfa99eb
 
         Handwritten Text Recognition with TensorFlow
         https://github.com/githubharald/SimpleHTR

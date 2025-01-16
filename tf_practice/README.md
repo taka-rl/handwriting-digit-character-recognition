@@ -11,13 +11,16 @@ This folder is for learning TensorFlow and building models for the recognition s
     │   ├── models                # trained models
     │   ├── test_images           # self created test images
     │   └── test_results          # test results
+    ├── src                       # source for the recognition systems
+    │   ├── build_models.py       # build models
+    │   ├── model.py              # Model class
+    │   ├── recognition_system.py # RecognitionSystem class
+    │   └── utilities.py          # utility functions such as plotting   
     ├── best_model_digit.h5       # model for the digit recognition system
-    ├── build_models.py           # 
-    ├── main.py                   # 
-    ├── model.py                  # 
-    ├── note.txt                  # 
-    ├── recognition_system.py     # 
-    ├── character_recognition.py  #
+    ├── main.py                   #
+    ├── note.txt                  #
+    ├── character_recognition.py  # 
+    ├── digit_recognition.py      # 
     ├── tensorflow_basics.py      # 
     └── README.md                 #
 

@@ -1,23 +1,9 @@
-from recognition_system import RecognitionSystem
-from model import Model
+from tf_practice.src.recognition_system import RecognitionSystem
+from tf_practice.src.model import Model
 from emnist import list_datasets
 import os
-from build_models import build_dense_model1, build_dense_model2, build_cnn_model1, build_cnn_model2, build_cnn_model3
-import matplotlib.pyplot as plt
-
-
-def plot_training_history(histories, labels):
-    plt.figure(figsize=(12, 5))
-    for history, label in zip(histories, labels):
-        plt.plot(history.history['val_accuracy'], label=f'{label} Val Accuracy')
-        plt.plot(history.history['accuracy'], '--', label=f'{label} Train Accuracy')
-    plt.xlabel("Epochs")
-    plt.ylabel("Accuracy")
-    plt.ylim([0, 1])
-    plt.legend()
-    plt.grid()
-    plt.title("Model Training Accuracy Comparison")
-    plt.show()
+from tf_practice.src.build_models import build_dense_model1, build_dense_model2, build_cnn_model1, build_cnn_model2, build_cnn_model3
+from tf_practice.src.utilities import plot_training_history
 
 
 def main():
