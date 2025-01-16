@@ -16,8 +16,7 @@ class RecognitionSystem:
                 Ex. (x_train, y_train), (x_test, y_test) = mnist.load_data()
 
         Returns:
-            dataset: Normalized dataset with each label
-
+            tuple[np.ndarray, np.ndarray]: Normalized dataset with each label
         """
         # Split dataset into data and label
         data, label = dataset
@@ -25,15 +24,15 @@ class RecognitionSystem:
         return data.astype('float32') / 255.0, label
 
     @staticmethod
-    def preprocess_emnist(dataset: tuple[np.ndarray, np.ndarray]):
+    def preprocess_emnist_letters(dataset: tuple[np.ndarray, np.ndarray]):
         """
-        Preprocess EMNIST data by normalizing images and shifting labels from [1, 26] to [0, 25].
+        Preprocess EMNIST letters data by normalizing images and shifting labels from [1, 26] to [0, 25].
 
         Parameters:
-            dataset: tuple[np.ndarray, np.ndarray]
+            dataset: tuple[np.ndarray, np.ndarray] -> (images, labels)
 
         Returns:
-            dataset: Normalized dataset with shifted labels
+            tuple[np.ndarray, np.ndarray]: Normalized dataset with shifted labels
         """
         # Split dataset into data and label
         data, label = dataset
@@ -41,6 +40,40 @@ class RecognitionSystem:
         # Create a writable copy of the label array
         label = np.copy(label)
         np.subtract(label, 1, out=label)
+
+        # Normalization uint8 -> float32
+        return data.astype('float32') / 255.0, label
+
+    @staticmethod
+    def preprocess_emnist_byclass(dataset: tuple[np.ndarray, np.ndarray]):
+        """
+        Preprocess EMNIST byclass data by normalizing images,
+         and extracting, filtering labels for only uppercase and lowercase letters.
+
+        In the byclass dataset:
+            Labels from 0 to 9: Digits
+            Labels from 10 to 35: Uppercase letters
+            Labels from 36 to 61: Lowercase letters
+
+        Parameters:
+            dataset: tuple[np.ndarray, np.ndarray] -> (images, labels)
+
+        Returns:
+            tuple[np.ndarray, np.ndarray]: Normalized and extracted dataset
+                                            including only uppercase and lowercase letters.
+        """
+        # Split dataset into data and label
+        data, label = dataset
+
+        # Filter to only the letter samples
+        letter_indices = np.where((label >= 10) & (label <= 61))[0]
+
+        # Filter images and labels
+        data = data[letter_indices]
+        label = label[letter_indices]
+
+        # Adjust labels to range
+        label = label - 10.
 
         # Normalization uint8 -> float32
         return data.astype('float32') / 255.0, label

@@ -21,7 +21,13 @@ class Model:
         self.train_data = None
         self.test_data = None
 
-    def load_dataset(self, dataset_class: str = 'letters') -> None:
+    def load_dataset(self) -> None:
+        """
+        Load the MNIST or EMNIST dataset based on dataset_class
+        Regarding the EMNIST dataset, these 6 types are available.
+            ['balanced', 'byclass', 'bymerge', 'digits', 'letters', 'mnist']
+        Although 'byclass' and 'letters' can be used, the rest of the types has not been checked yet.
+        """
         if self.dataset_name == 'mnist':
             mnist = tf.keras.datasets.mnist
             (x_train, y_train), (x_test, y_test) = mnist.load_data()
@@ -29,32 +35,35 @@ class Model:
             self.train_data = (x_train, y_train)
             self.test_data = (x_test, y_test)
 
-        elif self.dataset_name == 'emnist':
+        elif self.dataset_name.startswith('emnist'):
+            dataset_class = self.dataset_name.split('/')[1]
             x_train, y_train = extract_training_samples(dataset_class)
             x_test, y_test = extract_test_samples(dataset_class)
 
             self.train_data = (x_train, y_train)
             self.test_data = (x_test, y_test)
+        else:
+            raise ValueError('Invalid dataset_name. Use mnist or emnist/byclass or emnist/letters')
 
     def build_model(self) -> None:
-        if self.model_builder is None:
-            if self.model_type == 'CNN':
-                if self.dataset_name == 'mnist':
-                    self.model = build_cnn_model3(num_classes=10)
-                elif self.dataset_name == 'emnist':
-                    self.model = build_cnn_model3(num_classes=26)
-            elif self.model_type == 'DNN':
-                if self.dataset_name == 'mnist':
-                    self.model = build_dense_model2(num_classes=10)
-                elif self.dataset_name == 'emnist':
-                    self.model = build_dense_model2(num_classes=26)
-
+        num_classes = self._get_num_classes()
+        if self.model_builder:
+            self.model = self.model_builder(num_classes=num_classes)
         else:
-            if self.dataset_name == 'mnist':
-                self.model = self.model_builder(num_classes=10)
+            if self.model_type == 'CNN':
+                self.model = build_cnn_model3(num_classes=num_classes)
+            elif self.model_type == 'DNN':
+                self.model = build_dense_model2(num_classes=num_classes)
 
-            elif self.dataset_name == 'emnist':
-                self.model = self.model_builder(num_classes=26)
+    def _get_num_classes(self) -> int:
+        if self.dataset_name == 'mnist':
+            return 10
+        elif self.dataset_name == 'emnist/letters':
+            return 26
+        elif self.dataset_name == 'emnist/byclass':
+            return 52
+        else:
+            raise ValueError('Cannot determine num_classes for dataset')
 
     def compile_model(self) -> None:
         self.model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
