@@ -11,21 +11,15 @@ This folder is for learning TensorFlow and building models for the recognition s
     │   ├── models                # trained models
     │   ├── test_images           # self created test images
     │   └── test_results          # test results
-    ├── doc                       # codes for tic-tac-toe environment
-    ├── src                       # codes for tic-tac-toe environment
-    │   ├── model.py              # model class
-    │   ├── recognition_system.py # recognition system class
-    │   └──              
     ├── best_model_digit.h5       # model for the digit recognition system
-    ├── build_models.py           # Run the app
-    ├── main.py                   # Run the app
-    ├── model.py                  # Run the app
-    ├── note.txt                  # Run the app
-    ├── README.md                 # Run the app
-    ├── recognition_system.py                 # Run the app
-    ├── character_recognition.py                 # Run the app
-    ├── tensorflow_basics.py               # Run the app
-    └── README.md
+    ├── build_models.py           # 
+    ├── main.py                   # 
+    ├── model.py                  # 
+    ├── note.txt                  # 
+    ├── recognition_system.py     # 
+    ├── character_recognition.py  #
+    ├── tensorflow_basics.py      # 
+    └── README.md                 #
 
 ## about TensorFlow
 TensorFlow is an open-source platform for machine learning used by a variety of users such as data scientists, software developers and educators[^1].   
