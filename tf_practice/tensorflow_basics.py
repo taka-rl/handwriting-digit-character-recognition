@@ -90,35 +90,35 @@ if __name__ == '__main__':
 
     # -----------------------------------------------------------------------------
     # dense model1
-    model_lr, history_lr = train_or_load_model(build_dense_model1, 'digit_recognizer_dense1.h5',
+    model_lr, history_lr = train_or_load_model(build_dense_model1, 'digits', 'digit_recognizer_dense1.h5',
                                                (x_train, y_train), (x_test, y_test))
     # Evaluation
     dense_test_loss1, dense_test_acc1 = model_lr.evaluate(x_test, y_test)
 
     # -----------------------------------------------------------------------------
     # dense model2
-    model_mlp, history_mlp = train_or_load_model(build_dense_model2, 'digit_recognizer_dense2.h5',
-                                                 (x_train, y_train),(x_test, y_test))
+    model_mlp, history_mlp = train_or_load_model(build_dense_model2, 'digits', 'digit_recognizer_dense2.h5',
+                                                 (x_train, y_train), (x_test, y_test))
     # Evaluation
     dense_test_loss2, dense_test_acc2 = model_mlp.evaluate(x_test, y_test)
 
     # -----------------------------------------------------------------------------
     # CNN model1
-    model_cnn1, history_cnn1 = train_or_load_model(build_cnn_model1, 'digit_recognizer_cnn1.h5',
+    model_cnn1, history_cnn1 = train_or_load_model(build_cnn_model1, 'digits', 'digit_recognizer_cnn1.h5',
                                                    (x_train_cnn, y_train), (x_test_cnn, y_test))
     # Evaluation
     cnn_test_loss1, cnn_test_acc1 = model_cnn1.evaluate(x_test_cnn, y_test)
 
     # -----------------------------------------------------------------------------
     # CNN model2
-    model_cnn2, history_cnn2 = train_or_load_model(build_cnn_model2, 'digit_recognizer_cnn2.h5',
+    model_cnn2, history_cnn2 = train_or_load_model(build_cnn_model2, 'digits', 'digit_recognizer_cnn2.h5',
                                                    (x_train_cnn, y_train), (x_test_cnn, y_test))
     # Evaluation
     cnn_test_loss2, cnn_test_acc2 = model_cnn2.evaluate(x_test_cnn, y_test)
 
     # -----------------------------------------------------------------------------
     # CNN model3
-    model_cnn3, history_cnn3 = train_or_load_model(build_cnn_model3, 'digit_recognizer_cnn3.h5',
+    model_cnn3, history_cnn3 = train_or_load_model(build_cnn_model3, 'digits', 'digit_recognizer_cnn3.h5',
                                                    (x_train_cnn, y_train), (x_test_cnn, y_test))
     # Evaluation
     cnn_test_loss3, cnn_test_acc3 = model_cnn3.evaluate(x_test_cnn, y_test)

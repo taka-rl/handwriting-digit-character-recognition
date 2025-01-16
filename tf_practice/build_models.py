@@ -4,7 +4,7 @@ import os
 import json
 
 
-def build_dense_model1():
+def build_dense_model1(num_classes: int):
     """
     Build a Dense Neural Network model
 
@@ -21,18 +21,15 @@ def build_dense_model1():
             as it can produce a probability distribution as the result.
     """
     model = tf.keras.models.Sequential([
-        layers.Input(input_shape=(28, 28)),
+        layers.Input(shape=(28, 28)),
         layers.Flatten(),
-        layers.Dense(10, activation='softmax')
+        layers.Dense(num_classes, activation='softmax')
     ])
-
-    # Compile the model
-    model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
     return model
 
 
-def build_dense_model2():
+def build_dense_model2(num_classes: int):
     """
     Build a Dense Neural Network model
 
@@ -55,20 +52,17 @@ def build_dense_model2():
             as it can produce a probability distribution as the result.
     """
     model = tf.keras.models.Sequential([
-        layers.Input(input_shape=(28, 28)),
+        layers.Input(shape=(28, 28)),
         layers.Flatten(),
         layers.Dense(64, activation='elu'),
         layers.Dense(64, activation='elu'),
-        layers.Dense(10, activation='softmax')
+        layers.Dense(num_classes, activation='softmax')
     ])
-
-    # Compile the model
-    model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
     return model
 
 
-def build_cnn_model1():
+def build_cnn_model1(num_classes: int):
     """
     Build a Convolutional Neural Network model
 
@@ -92,18 +86,13 @@ def build_cnn_model1():
         tf.keras.layers.Flatten(),
         tf.keras.layers.Dense(128, activation='relu'),
         tf.keras.layers.Dropout(0.5),
-        tf.keras.layers.Dense(10, activation='softmax')
+        tf.keras.layers.Dense(num_classes, activation='softmax')
     ])
-
-    model.compile(
-        optimizer=tf.keras.optimizers.RMSprop(epsilon=1e-08),
-        loss=tf.keras.losses.SparseCategoricalCrossentropy(),
-        metrics=["accuracy"])
 
     return model
 
 
-def build_cnn_model2():
+def build_cnn_model2(num_classes: int):
     """
     Build a Convolutional Neural Network model
     The model is based on the following article.
@@ -121,17 +110,13 @@ def build_cnn_model2():
         layers.Conv2D(10,  3, activation="relu"),
         layers.MaxPool2D(),
         layers.Flatten(),
-        layers.Dense(10, activation="softmax")
+        layers.Dense(num_classes, activation="softmax")
     ])
-
-    model.compile(loss="sparse_categorical_crossentropy",
-                  optimizer=tf.keras.optimizers.Adam(),
-                  metrics=["accuracy"])
 
     return model
 
 
-def build_cnn_model3():
+def build_cnn_model3(num_classes: int):
     """
     Build a Convolutional Neural Network model
     The model is based on the following GitHub repository.
@@ -160,25 +145,40 @@ def build_cnn_model3():
         layers.Dropout(0.4),
         layers.Flatten(),
         layers.Dropout(0.4),
-        layers.Dense(10, activation='softmax')
+        layers.Dense(num_classes, activation='softmax')
     ])
-
-    model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
     return model
 
 
-def train_or_load_model(model_builder, model_name, train_data, val_data, epochs=10, batch_size=128):
+def train_or_load_model(model_builder,
+                        sys_name: str,
+                        model_name: str,
+                        train_data,
+                        val_data,
+                        epochs: int = 10,
+                        batch_size: int = 128):
     """
     Train a model and save the model as .h5 the training result as JSON file, or load a model if the model exists.
     """
-    model_path = os.path.join('digits/models', model_name)
+
+    model_path = os.path.join(f'{sys_name}/model', model_name)
     if os.path.isfile(model_path):
         print(f"------ Loading existing model: {model_path} ------")
         model = models.load_model(model_path, compile=False)
     else:
-        model = model_builder()
+        if sys_name == 'digits':
+            num_classes = 10
+        elif sys_name == 'characters':
+            num_classes = 26
+        else:
+            print("sys_name is an invalid value. You should choose 'digit' or 'character'.")
+            raise ValueError
+
+        model = model_builder(num_classes)
         model.summary()
+        print("Compiling new model")
+        model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
         print(f"Training new model: {model_path}")
         history = model.fit(*train_data, epochs=epochs, batch_size=batch_size, validation_data=val_data, verbose=False)
         model.save(model_path)
