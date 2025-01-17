@@ -1,48 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Handwriting Recognition</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+{% extends "base.html" %}
 
-</head>
-<body>
-  <div class="canvas-page">
-    <div class="container">
-      <div class="canvas-section">
-        <h2>Draw a Character</h2>
-          <canvas id="canvas" width="280" height="280"></canvas>
-            <div class="controls">
-              <button onclick="clearCanvas()">Clear</button>
-              <button onclick="submitCharacterDrawing()">Predict</button>
-            </div>
-        <a href="{{ url_for('home') }}">Return to the main page</a>
+{% block title %}Draw a Character{% endblock %}
+
+{% block content %}
+<div class="canvas-page">
+  <div class="container">
+    <div class="canvas-section">
+      <h2>Draw a Character</h2>
+      <canvas id="canvas" width="280" height="280"></canvas>
+      <div class="controls">
+        <button onclick="clearCanvas()">Clear</button>
+        <button onclick="submitCharacterDrawing()">Predict</button>
       </div>
-      <div class="results-section">
-        <h2>Prediction</h2>
-        <div id="prediction" class="prediction">?</div>
-        <div id="confidence" class="confidence">Confidence: -</div>
-        <div id="upperChartContainer" class="chart-container-character">
-          <h3>Uppercase Letters</h3>
-          <!-- Uppercase Bars will be dynamically added here -->
-        </div>
-        <div class="chart-labels-character">
-          <span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span><span>I</span><span>J</span><span>K</span><span>L</span><span>M</span>
-          <span>N</span><span>O</span><span>P</span><span>Q</span><span>R</span><span>S</span><span>T</span><span>U</span><span>V</span><span>W</span><span>X</span><span>Y</span><span>Z</span>
-        </div>
-        <div id="lowerChartContainer" class="chart-container-character">
-          <h3>Lowercase Letters</h3>
-          <!-- Lowercase Bars will be dynamically added here -->
-        </div>
-        <div class="chart-labels-character">
-          <span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span><span>g</span><span>h</span><span>i</span><span>j</span><span>k</span><span>l</span><span>m</span>
-          <span>n</span><span>o</span><span>p</span><span>q</span><span>r</span><span>s</span><span>t</span><span>u</span><span>v</span><span>w</span><span>x</span><span>y</span><span>z</span>
-        </div>
+      <a href="{{ url_for('home') }}">Return to the main page</a>
+    </div>
+    <div class="results-section">
+      <h2>Prediction</h2>
+      <div id="prediction" class="prediction">?</div>
+      <div id="confidence" class="confidence">Confidence: -</div>
+      <div id="upperChartContainer" class="chart-container-character">
+        <h3>Uppercase Letters</h3>
+        <!-- Uppercase Bars will be dynamically added here -->
+      </div>
+      <div class="chart-labels-character">
+        <span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span><span>I</span><span>J</span><span>K</span><span>L</span><span>M</span>
+        <span>N</span><span>O</span><span>P</span><span>Q</span><span>R</span><span>S</span><span>T</span><span>U</span><span>V</span><span>W</span><span>X</span><span>Y</span><span>Z</span>
+      </div>
+      <div id="lowerChartContainer" class="chart-container-character">
+        <h3>Lowercase Letters</h3>
+        <!-- Lowercase Bars will be dynamically added here -->
+      </div>
+      <div class="chart-labels-character">
+        <span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span><span>g</span><span>h</span><span>i</span><span>j</span><span>k</span><span>l</span><span>m</span>
+        <span>n</span><span>o</span><span>p</span><span>q</span><span>r</span><span>s</span><span>t</span><span>u</span><span>v</span><span>w</span><span>x</span><span>y</span><span>z</span>
       </div>
     </div>
   </div>
-
-  <script src="/static/js/canvas.js"></script>
-</body>
-</html>
+</div>
+{% endblock %}

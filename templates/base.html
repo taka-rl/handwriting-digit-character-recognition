@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Handwriting Recognition System{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+</head>
+<body>
+  <div class="container">
+    {% block content %}{% endblock %}
+  </div>
+
+  <footer id="footer">
+    <a href="https://www.linkedin.com/in/takaya-murakami/" target="_blank"><i class="social-media-icons fab fa-2x fa-linkedin"></i></a>
+    <a href="https://github.com/taka-rl" target="_blank"><i class="social-media-icons fab fa-2x fa-github" aria-hidden="true"></i></i></a>
+  </footer>
+  <script src="/static/js/canvas.js"></script>
+</body>
+</html>

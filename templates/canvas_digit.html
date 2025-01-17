@@ -1,39 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Handwriting Recognition</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+{% extends "base.html" %}
 
-</head>
-<body>
-  <div class="canvas-page">
-    <div class="container">
-      <div class="canvas-section">
-        <h2>Draw a Digit</h2>
-          <canvas id="canvas" width="280" height="280"></canvas>
-            <div class="controls">
-              <button onclick="clearCanvas()">Clear</button>
-              <button onclick="submitDigitDrawing()">Predict</button>
-            </div>
-        <a href="{{ url_for('home') }}">Return to the main page</a>
+{% block title %}Draw a Character{% endblock %}
+
+{% block content %}
+<div class="canvas-page">
+  <div class="container">
+    <div class="canvas-section">
+      <h2>Draw a Digit</h2>
+      <canvas id="canvas" width="280" height="280"></canvas>
+      <div class="controls">
+        <button onclick="clearCanvas()">Clear</button>
+        <button onclick="submitDigitDrawing()">Predict</button>
       </div>
-      <div class="results-section">
-        <h2>Prediction</h2>
-        <div id="prediction" class="prediction">?</div>
-        <div id="confidence" class="confidence">Confidence: -</div>
-        <div id="chartContainer" class="chart-container">
-          <!-- Bars will be dynamically added here -->
-        </div>
-        <div class="chart-labels-digit">
-          <span>0</span><span>1</span><span>2</span><span>3</span><span>4</span>
-          <span>5</span><span>6</span><span>7</span><span>8</span><span>9</span>
-        </div>
+      <a href="{{ url_for('home') }}">Return to the main page</a>
+    </div>
+    <div class="results-section">
+      <h2>Prediction</h2>
+      <div id="prediction" class="prediction">?</div>
+      <div id="confidence" class="confidence">Confidence: -</div>
+      <div id="chartContainer" class="chart-container">
+        <!-- Bars will be dynamically added here -->
+      </div>
+      <div class="chart-labels-digit">
+        <span>0</span><span>1</span><span>2</span><span>3</span><span>4</span>
+        <span>5</span><span>6</span><span>7</span><span>8</span><span>9</span>
       </div>
     </div>
   </div>
-
-  <script src="/static/js/canvas.js"></script>
-</body>
-</html>
+</div>
+{% endblock %}

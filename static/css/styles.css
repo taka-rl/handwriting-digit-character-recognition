@@ -16,6 +16,40 @@ button {
     cursor: pointer;
 }
 
+/* footer */
+#footer {
+  background-color: #f1f1f1;
+  text-align: center;
+  padding: 20px 0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 10;
+}
+
+#footer a {
+  margin: 0 10px;
+  color: #333;
+  text-decoration: none;
+}
+
+#footer a:hover {
+  color: #0073b1; /* LinkedIn's blue color for hover effect */
+}
+
+.social-media-icons {
+  margin: 0 20px;
+  color: #333;
+}
+
+.social-media-icons:hover {
+  color: #0073b1; /* Matches LinkedIn's hover color */
+}
+
+.fab.fa-github:hover {
+  color: #6e5494; /* GitHub's hover color */
+}
+
 /* Canvas Section Styling */
 .canvas-page #canvas {
     border: 1px solid black;
