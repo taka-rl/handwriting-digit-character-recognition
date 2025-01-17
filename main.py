@@ -93,7 +93,6 @@ def submit_character_drawing():
         # Split predictions into uppercase and lowercase
         upper_predictions = predictions[0][:26]
         lower_predictions = predictions[0][26:]
-        print(f'upper_case: {len(upper_predictions)}')
 
         return jsonify({"prediction": character_list[predicted_class],
                         "confidence": confidence,
@@ -115,11 +114,10 @@ def import_character_picture():
     return render_template('import_character.html')
 
 
-@app.route('/upload', methods=['POST'])
-def upload_picture():
+@app.route('/upload-digit', methods=['POST'])
+def upload_digit_picture():
     file = request.files['file']
     if file:
-        print("Image is loaded")
         # Prepare the prediction
         image = Image.open(file).convert('L')  # Convert to grayscale
         processed_image = preprocess_image(image)
@@ -137,6 +135,37 @@ def upload_picture():
         return jsonify({"prediction": predicted_class,
                         "confidence": confidence,
                         "probabilities": predictions.tolist()
+                        })
+    else:
+        return jsonify({"error": "No file uploaded"}), 400
+
+
+@app.route('/upload-character', methods=['POST'])
+def upload_character_picture():
+    file = request.files['file']
+    if file:
+        # Prepare the prediction
+        image = Image.open(file).convert('L')  # Convert to grayscale
+        processed_image = preprocess_image(image)
+
+        # Reshape for CNN
+        processed_image = reshape_for_cnn(processed_image)
+
+        # Predict the image
+        predictions = model_character.predict(processed_image)
+
+        # Extract the predicted class and confidence
+        predicted_class = int(np.argmax(predictions))  # Convert NumPy scalar to int
+        confidence = float(np.max(predictions))  # Convert Numpy scalar to float
+
+        # Split predictions into uppercase and lowercase
+        upper_predictions = predictions[0][:26]
+        lower_predictions = predictions[0][26:]
+
+        return jsonify({"prediction": character_list[predicted_class],
+                        "confidence": confidence,
+                        "upper_probabilities": upper_predictions.tolist(),
+                        "lower_probabilities": lower_predictions.tolist()
                         })
     else:
         return jsonify({"error": "No file uploaded"}), 400
