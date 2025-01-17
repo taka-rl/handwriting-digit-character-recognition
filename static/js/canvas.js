@@ -50,9 +50,9 @@ function changeDrawingColor(color){
   ctx.strokeStyle = color; // Update the stroke color
 }
 
-function submitDrawing(){
+function submitDigitDrawing(){
   const dataURL = canvas.toDataURL('image/png');
-  fetch('/submit', {
+  fetch('/submit-digit', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -65,7 +65,27 @@ function submitDrawing(){
       alert(`Error: ${data.error}`);
       return;
     }
-    updateResults(data);
+    updateDigitResults(data);
+  })
+  .catch(error => console.error('Error:', error));
+}
+
+function submitCharacterDrawing(){
+  const dataURL = canvas.toDataURL('image/png');
+  fetch('/submit-character', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ image: dataURL })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if(data.error){
+      alert(`Error: ${data.error}`);
+      return;
+    }
+    updateCharacterResults(data);
   })
   .catch(error => console.error('Error:', error));
 }
@@ -79,7 +99,7 @@ function getEventPosition(event){
   }
 }
 
-function updateResults(data){
+function updateDigitResults(data){
   const probabilities = data.probabilities[0];  // Access the inner array of probabilities
   const predictionElement = document.getElementById('prediction');
   const confidenceElement = document.getElementById('confidence');
@@ -94,7 +114,7 @@ function updateResults(data){
   // Create the distribution bar chart
   probabilities.forEach((prob, index) => {
     const bar = document.createElement('div');
-    bar.className = 'chart-bar';
+    bar.className = 'chart-bar-digit';
     bar.style.height = `${prob * 100}%`;
     bar.style.left = `${index * 30}px`;
     // Highlight the predicted bar
@@ -104,5 +124,53 @@ function updateResults(data){
     // Add text label inside the bar
     bar.textContent = `${(prob * 100).toFixed(1)}%`;
     chartContainer.appendChild(bar);
+  });
+}
+
+function updateCharacterResults(data){
+  const upperProbabilities = data.upper_probabilities;  // Uppercase probabilities
+  const lowerProbabilities = data.lower_probabilities;  // Lowercase probabilities
+  console.log(upperProbabilities);
+  console.log(lowerProbabilities);
+  const predictionElement = document.getElementById('prediction');
+  const confidenceElement = document.getElementById('confidence');
+  const upperChartContainer = document.getElementById('upperChartContainer');
+  const lowerChartContainer = document.getElementById('lowerChartContainer');
+
+  predictionElement.textContent = data.prediction;
+  confidenceElement.textContent = `Confidence: ${(data.confidence * 100).toFixed(2)}%`;
+
+  // Clear existing chart
+  upperChartContainer.innerHTML = '';
+  lowerChartContainer.innerHTML = '';
+
+  // Create the Uppercase distribution bar chart
+  upperProbabilities.forEach((prob, index) => {
+    const bar = document.createElement('div');
+    bar.className = 'chart-bar-character';
+    bar.style.height = `${prob * 100}%`;
+    bar.style.left = `${index * 27}px`;
+    // Highlight the predicted bar
+    if(index === data.prediction){
+      bar.classList.add('active');
+    }
+    // Add text label inside the bar
+    bar.textContent = `${(prob * 100).toFixed(1)}%`;
+    upperChartContainer.appendChild(bar);
+  });
+
+  // Create the Lowercase distribution bar chart
+  lowerProbabilities.forEach((prob, index) => {
+    const bar = document.createElement('div');
+    bar.className = 'chart-bar-character';
+    bar.style.height = `${prob * 100}%`;
+    bar.style.left = `${index * 27}px`;
+    // Highlight the predicted bar
+    if(index+26 === data.prediction){
+      bar.classList.add('active');
+    }
+    // Add text label inside the bar
+    bar.textContent = `${(prob * 100).toFixed(1)}%`;
+    lowerChartContainer.appendChild(bar);
   });
 }
