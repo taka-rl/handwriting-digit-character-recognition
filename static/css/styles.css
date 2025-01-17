@@ -55,6 +55,7 @@ button {
 }
 
 /* Results Section Styling */
+/* Bar chart for common */
 .canvas-page .results-section {
     text-align: center;
     width: 300px;
@@ -72,6 +73,10 @@ button {
     color: #555;
 }
 
+.canvas-page .chart-bar.active {
+    background-color: #007bff;  /* blue for the predicted bar */
+}
+
 .canvas-page .chart-container {
     width: 300px;
     height: 150px;
@@ -80,24 +85,50 @@ button {
     border: 1px solid #ddd;
 }
 
-.canvas-page .chart-bar {
+/* Bar chart for digit */
+.canvas-page .chart-labels-digit {
+    display: flex;
+    justify-content: space-between;
+    width: 300px; /* Match the chart container width */
+    margin-top: 10px;
+    font-size: 14px;
+    color: #333;
+}
+
+.canvas-page .chart-bar-digit {
     position: absolute;
     bottom: 0;
-    width: 25px;
+    width: 30px;
     background-color: #92bf88;  /* light green for the non-predicted bar*/
     text-align: center;
     font-size: 10px;
     color: white;
 }
 
-.canvas-page .chart-bar.active {
-    background-color: #007bff;  /* blue for the predicted bar */
+/* Bar chart for character */
+#upperChartContainer, #lowerChartContainer {
+  margin-top: 20px;
+  width: 700px;
+  height: 150px;
+  border: 1px solid #ddd;
+  position: relative;
 }
 
-.canvas-page .chart-labels {
+.canvas-page .chart-labels-character {
     display: flex;
     justify-content: space-between;
+    width: 700px; /* Match the chart container width */
     margin-top: 10px;
     font-size: 14px;
     color: #333;
+}
+
+.canvas-page .chart-bar-character {
+    position: absolute;
+    bottom: 0;
+    width: 20px;
+    background-color: #92bf88;  /* light green for the non-predicted bar*/
+    text-align: center;
+    font-size: 10px;
+    color: white;
 }

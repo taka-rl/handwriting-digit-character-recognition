@@ -5,14 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Handwriting Recognition</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-
 </head>
 <body>
   <div class="container">
     <h2>Handwriting Recognition</h2>
     <p>Choose an option to start:</p>
-    <button onclick="window.location.href='{{ url_for('canvas') }}'">Draw on Canvas</button>
-    <button onclick="window.location.href='{{ url_for('import_picture') }}'">Import a Picture</button>
+    <button onclick="window.location.href='{{ url_for('canvas_digit') }}'">Draw a Digit on Canvas </button>
+    <button onclick="window.location.href='{{ url_for('import_digit_picture') }}'">Import a Digit Picture</button>
+    <button onclick="window.location.href='{{ url_for('canvas_character') }}'">Draw a Character on Canvas </button>
+    <button onclick="window.location.href='{{ url_for('import_character_picture') }}'">Import a Character Picture</button>
   </div>
 </body>
 </html>

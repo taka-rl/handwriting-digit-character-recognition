@@ -1,15 +1,17 @@
 # handwriting-digit-character-recognition
 A Flask web app for handwriting digit and character recognition using machine learning.  
-Although this project is currently under development, the digit recognition system has been developed so far!  
-The character recognition system will be developed and merged later.  
+Although this project is currently under development, both digit and character recognition systems have been developed so far!  
+Currently digit and character recognition systems have been implemented in separate routes(submit-digit, submit-character, upload-digit, upload-character). However, they will be in a single route based on functionalities(drawing or importing) later. For example, submit, upload.
 
-## digit recognition 
-In the digit recognition, there are two ways to predict, drawing digits or importing images. 
-The prediction for drawing digits have been completed and for importing images will be developed later.  
+## digit and character recognition systems
+There are two ways to predict, drawing or importing images. 
+The prediction for drawing digits and characters have been completed.
+The frontend of prediction for importing images will be developed later.
 
-## model for the digit recognition
+## model for both digit and character recognition
 The CNN model is used with the following layers. 
 ```
+    num_classes is 10 for the digit recognition and 52 for the character recognition.
     model = tf.keras.Sequential([
         layers.Conv2D(32, kernel_size=3, activation='relu', input_shape=(28, 28, 1)),
         layers.MaxPooling2D(),
@@ -27,14 +29,21 @@ The CNN model is used with the following layers.
         layers.Dropout(0.4),
         layers.Flatten(),
         layers.Dropout(0.4),
-        layers.Dense(10, activation='softmax')
+        layers.Dense(num_classes, activation='softmax')
     ])
 ```
-The model was trained with MNIST dataset.
+The model for the digit recognition system was trained with MNIST dataset.
 ```
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 model.fit(*train_data, epochs=10, batch_size=128, validation_data=(x_test, y_test), verbose=False)
 ```
+The model for the character recognition system was trained with EMNIST byclass dataset.
+```
+x_train, y_train = extract_training_samples(dataset_class)
+x_test, y_test = extract_test_samples(dataset_class)
+model.fit(*train_data, epochs=10, batch_size=128, validation_split=0.2, verbose=False)
+```
+
 The model was compiled with the following settings: 
 ```
 model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
@@ -42,7 +51,16 @@ model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=
 
 ## How to use
 1. Run the main.py  
-2. Click the "Draw on Canvas"   
-![image](https://github.com/user-attachments/assets/7ee5c965-7877-4359-9029-0be973a29338)
-3. Draw any digits from 0 to 9 and click the "Predict" button.  
-![image](https://github.com/user-attachments/assets/4ab172c9-5a31-4093-891a-49ea080db0dd)
+2. Click either "Draw a Digit on Canvas" or "Draw a Character on Canvas".
+3. Draw any digits from 0 to 9 or draw any characters, and click the "Predict" button.  
+"Draw a Digit on Canvas"
+![image](https://github.com/user-attachments/assets/05f09d5b-25ff-44d4-a07f-841e0d84adc5)
+"Draw a Character on Canvas"
+![image](https://github.com/user-attachments/assets/6e33bf48-9fc9-4483-a993-34e27265e01a)
+
+
+## Todo
+- Deepen the understanding of TensorFlow and machine learning and deep learning knowledges 
+- Improve the model performance and accuracy for both digits and character recognition systems 
+- Build a model including both digits and characters
+- Make a single route based on functionalities(drawing or importing) such as submit route(drawing), upload route(importing).

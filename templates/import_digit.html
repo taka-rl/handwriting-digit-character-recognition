@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Import Picture</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h2>Upload a Digit Picture for Recognition</h2>
+    <form action="/upload-digit" method="post" enctype="multipart/form-data">
+      <input type="file" name="file" accept="image/*" required>
+      <button type="submit">Submit</button>
+    </form>
+    <a href="{{ url_for('home') }}">Return to the main page</a>
+  </div>
+</body>
+</html>
