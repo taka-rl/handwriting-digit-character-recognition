@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, render_template
-from tensorflow.keras import models
+from tensorflow.keras.models import load_model
 from PIL import Image
 import numpy as np
 import base64
@@ -183,8 +183,8 @@ def preprocess_image(image, target_size=(28, 28)):
 
 
 if __name__ == '__main__':
-    model_digit = models.load_model('./tf_practice/best_model_digit.h5')
-    model_character = models.load_model('./tf_practice/best_model_character.h5')
+    model_digit = load_model('./tf_practice/best_model_digit.h5')
+    model_character = load_model('./tf_practice/best_model_character.h5')
     character_list = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
                       'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
                       'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
