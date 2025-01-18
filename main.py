@@ -186,8 +186,18 @@ def preprocess_image(image, target_size=(28, 28)):
 
 
 if __name__ == '__main__':
-    model_digit = load_model('./tf_practice/best_model_digit.h5')
-    model_character = load_model('./tf_practice/best_model_character.h5')
+    try:
+        model_digit = load_model('./tf_practice/best_model_digit.h5')
+        print("Digit model loaded successfully")
+    except Exception as e:
+        print("Failed to load digit model:", e)
+
+    try:
+        model_character = load_model('./tf_practice/best_model_character.h5')
+        print("Character model loaded successfully")
+    except Exception as e:
+        print("Failed to load character model:", e)
+
     character_list = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
                       'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
                       'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
