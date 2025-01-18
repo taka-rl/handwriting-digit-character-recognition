@@ -28,8 +28,10 @@ def canvas_character():
     return render_template('canvas_character.html')
 
 
-@app.route('/submit-digit', methods=['POST'])
+@app.route('/submit-digit', methods=['Get', 'POST'])
 def submit_digit_drawing():
+    if model_digit is None:
+        return jsonify({"error": "Digit model is not loaded"}), 500
     data = request.json.get('image', None)
     if data is None:
         return jsonify({"error": "No image data provided"})
@@ -186,18 +188,8 @@ def preprocess_image(image, target_size=(28, 28)):
 
 
 if __name__ == '__main__':
-    try:
-        model_digit = load_model('./tf_practice/best_model_digit.h5')
-        print("Digit model loaded successfully")
-    except Exception as e:
-        print("Failed to load digit model:", e)
-
-    try:
-        model_character = load_model('./tf_practice/best_model_character.h5')
-        print("Character model loaded successfully")
-    except Exception as e:
-        print("Failed to load character model:", e)
-
+    model_digit = load_model('./tf_practice/best_model_digit.h5')
+    model_character = load_model('./tf_practice/best_model_character.h5')
     character_list = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
                       'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
                       'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
