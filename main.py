@@ -4,8 +4,11 @@ from PIL import Image
 import numpy as np
 import base64
 import io
+import sys
+import os
 
 
+sys.path.append(os.path.abspath("./tf_practice"))
 model_digit, model_character, character_list = None, None, None
 app = Flask(__name__)
 
@@ -189,4 +192,6 @@ if __name__ == '__main__':
                       'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
                       'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
                       'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z')
-    app.run()
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
+
