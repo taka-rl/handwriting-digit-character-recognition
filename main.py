@@ -9,7 +9,12 @@ import os
 
 
 sys.path.append(os.path.abspath("./tf_practice"))
-model_digit, model_character, character_list = None, None, None
+model_digit = load_model('./tf_practice/best_model_digit.h5')
+model_character = load_model('./tf_practice/best_model_character.h5')
+character_list = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+                  'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+                  'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+                  'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z')
 app = Flask(__name__)
 
 
@@ -188,12 +193,6 @@ def preprocess_image(image, target_size=(28, 28)):
 
 
 if __name__ == '__main__':
-    model_digit = load_model('./tf_practice/best_model_digit.h5')
-    model_character = load_model('./tf_practice/best_model_character.h5')
-    character_list = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-                      'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-                      'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-                      'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z')
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
 
