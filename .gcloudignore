@@ -1,0 +1,22 @@
+# Ignore Python cache and compiled files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore virtual environment
+venv/
+env/
+
+# Ignore IDE and editor config files
+*.idea/
+.DS_Store
+
+# Ignore tf_practice folder except for model files
+tf_practice/characters/
+tf_practice/digits/
+tf_practice/src/
+tf_practice/doc/
+
+# Ignore doc
+doc/
+

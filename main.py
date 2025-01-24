@@ -1,12 +1,29 @@
 from flask import Flask, request, jsonify, render_template
-from tensorflow.keras.models import load_model
+from tensorflow.keras.models import model_from_json
 from PIL import Image
 import numpy as np
 import base64
 import io
+import os
 
 
-model_digit, model_character, character_list = None, None, None
+with open("./tf_practice/model_digit.json", "r") as json_file:
+    model_digit_json = json_file.read()
+
+with open("./tf_practice/model_character.json", "r") as json_file:
+    model_character_json = json_file.read()
+
+model_digit, model_character = model_from_json(model_digit_json), model_from_json(model_character_json)
+model_digit.load_weights("./tf_practice/model_digit_weights.h5")
+model_character.load_weights("./tf_practice/model_character_weights.h5")
+
+character_list = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+                  'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+                  'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+                  'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z')
+
+del model_digit_json, model_character_json
+
 app = Flask(__name__)
 
 
@@ -27,6 +44,8 @@ def canvas_character():
 
 @app.route('/submit-digit', methods=['POST'])
 def submit_digit_drawing():
+    if model_digit is None:
+        return jsonify({"error": "Digit model is not loaded"}), 500
     data = request.json.get('image', None)
     if data is None:
         return jsonify({"error": "No image data provided"})
@@ -179,14 +198,9 @@ def preprocess_image(image, target_size=(28, 28)):
     """Resize and normalize the image."""
     img = image.resize(target_size)  # Resize image
     img_array = np.array(img) / 255.0  # Convert to numpy array and normalize
-    return img_array[np.newaxis, :, :]  # Add bathtch dimension
+    return img_array[np.newaxis, :, :]  # Add batch dimension
 
 
 if __name__ == '__main__':
-    model_digit = load_model('./tf_practice/best_model_digit.h5')
-    model_character = load_model('./tf_practice/best_model_character.h5')
-    character_list = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-                      'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-                      'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-                      'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z')
-    app.run()
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)

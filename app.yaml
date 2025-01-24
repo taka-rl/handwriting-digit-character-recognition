@@ -1,0 +1,4 @@
+runtime: python310
+entrypoint: gunicorn -b :$PORT main:app
+# service: handwriting-recognition-systems
+# service_account: handwriting-recognition-systems@united-electron-448518-q3.iam.gserviceaccount.com
