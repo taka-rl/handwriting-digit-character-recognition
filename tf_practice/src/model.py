@@ -90,8 +90,15 @@ class Model:
     def save_model(self, model_path: str) -> None:
         self.model.save(model_path)
 
+    def save_model_json(self) -> None:
+        model_json = self.model.to_json()
+        with open('model_structure.json', 'w') as json_file:
+            json_file.write(model_json)
+
+        self.model.save_weights('model_weights.h5')
+
     @staticmethod
-    def save_model_json(model_path, history) -> None:
+    def save_training_history(model_path, history) -> None:
         with open(model_path + '.json', 'w') as f:
             json.dump(history.history, f)
 

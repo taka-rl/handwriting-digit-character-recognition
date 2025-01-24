@@ -55,7 +55,8 @@ def main():
             model.compile_model()
             histories[i] = model.train_model()
             model.save_model(model_path)
-            model.save_model_json(model_path, histories[i])
+            model.save_training_history(model_path, histories[i])
+            model.save_model_json()
 
             # Evaluation
             loss, acc = model.evaluate_model()
