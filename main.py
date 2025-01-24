@@ -22,6 +22,8 @@ character_list = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M
                   'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
                   'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z')
 
+del model_digit_json, model_character_json
+
 app = Flask(__name__)
 
 
@@ -40,7 +42,7 @@ def canvas_character():
     return render_template('canvas_character.html')
 
 
-@app.route('/submit-digit', methods=['Get', 'POST'])
+@app.route('/submit-digit', methods=['POST'])
 def submit_digit_drawing():
     if model_digit is None:
         return jsonify({"error": "Digit model is not loaded"}), 500
@@ -196,7 +198,7 @@ def preprocess_image(image, target_size=(28, 28)):
     """Resize and normalize the image."""
     img = image.resize(target_size)  # Resize image
     img_array = np.array(img) / 255.0  # Convert to numpy array and normalize
-    return img_array[np.newaxis, :, :]  # Add bathtch dimension
+    return img_array[np.newaxis, :, :]  # Add batch dimension
 
 
 if __name__ == '__main__':

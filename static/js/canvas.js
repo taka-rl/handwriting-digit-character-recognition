@@ -130,8 +130,6 @@ function updateDigitResults(data){
 function updateCharacterResults(data){
   const upperProbabilities = data.upper_probabilities;  // Uppercase probabilities
   const lowerProbabilities = data.lower_probabilities;  // Lowercase probabilities
-  console.log(upperProbabilities);
-  console.log(lowerProbabilities);
   const predictionElement = document.getElementById('prediction');
   const confidenceElement = document.getElementById('confidence');
   const upperChartContainer = document.getElementById('upperChartContainer');
