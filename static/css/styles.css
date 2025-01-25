@@ -62,6 +62,7 @@ button {
 
 .canvas-page .container {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     margin-top: 50px;
     font-family: Arial, sans-serif;
@@ -89,12 +90,7 @@ button {
 }
 
 /* Results Section Styling */
-/* Bar chart for common */
-.canvas-page .results-section {
-    text-align: center;
-    width: 300px;
-}
-
+/* Common for both Digit and Character */
 .canvas-page .prediction {
     font-size: 2em;
     margin-top: 10px;
@@ -110,7 +106,13 @@ button {
 .canvas-page .chart-bar.active {
     background-color: #007bff;  /* blue for the predicted bar */
 }
+/* Digit */
+.canvas-page .results-section {
+    text-align: center;
+    width: 300px;
+}
 
+/* Bar chart for digit */
 .canvas-page .chart-container {
     width: 300px;
     height: 150px;
@@ -119,7 +121,6 @@ button {
     border: 1px solid #ddd;
 }
 
-/* Bar chart for digit */
 .canvas-page .chart-labels-digit {
     display: flex;
     justify-content: space-between;
@@ -139,6 +140,7 @@ button {
     color: white;
 }
 
+/* Character */
 /* Bar chart for character */
 #upperChartContainer, #lowerChartContainer {
   margin-top: 20px;
@@ -166,3 +168,10 @@ button {
     font-size: 10px;
     color: white;
 }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .canvas-page .container {
+        flex-direction: column;
+        align-items: center;
+    }
