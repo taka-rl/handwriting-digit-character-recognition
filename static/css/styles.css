@@ -107,11 +107,6 @@ button {
     background-color: #007bff;  /* blue for the predicted bar */
 }
 /* Digit */
-.canvas-page .results-section {
-    text-align: center;
-    width: 300px;
-}
-
 /* Bar chart for digit */
 .canvas-page .chart-container {
     width: 300px;
