@@ -11,12 +11,7 @@ env/
 *.idea/
 .DS_Store
 
-# Ignore tf_practice folder except for model files
-tf_practice/characters/
-tf_practice/digits/
-tf_practice/src/
-tf_practice/doc/
-
-# Ignore doc
+# Ignore tf_practice, doc folders
+tf_practice/
 doc/
 

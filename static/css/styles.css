@@ -106,7 +106,11 @@ button {
 .canvas-page .chart-bar.active {
     background-color: #007bff;  /* blue for the predicted bar */
 }
-/* Digit */
+
+.canvas-page .results-section {
+    margin-bottom: 80px;
+}
+
 /* Bar chart for digit */
 .canvas-page .chart-container {
     width: 300px;
