@@ -7,15 +7,15 @@ import io
 import os
 
 
-with open("./tf_practice/model_digit.json", "r") as json_file:
+with open("static/models/model_digit.json", "r") as json_file:
     model_digit_json = json_file.read()
 
-with open("./tf_practice/model_character.json", "r") as json_file:
+with open("static/models/model_character.json", "r") as json_file:
     model_character_json = json_file.read()
 
 model_digit, model_character = model_from_json(model_digit_json), model_from_json(model_character_json)
-model_digit.load_weights("./tf_practice/model_digit_weights.h5")
-model_character.load_weights("./tf_practice/model_character_weights.h5")
+model_digit.load_weights("static/models/model_digit_weights.h5")
+model_character.load_weights("static/models/model_character_weights.h5")
 
 character_list = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
                   'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',

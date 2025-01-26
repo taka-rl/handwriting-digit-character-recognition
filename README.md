@@ -64,5 +64,4 @@ model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=
 - Improve the model performance and accuracy for both digits and character recognition systems 
 - Build a model including both digits and characters
 - Make a single route based on functionalities(drawing or importing) such as submit route(drawing), upload route(importing).
-- Deploy the app
 - Build a way of collecting data input by users and train the model with the collected data to improve

@@ -116,7 +116,6 @@ function updateDigitResults(data){
     const bar = document.createElement('div');
     bar.className = 'chart-bar-digit';
     bar.style.height = `${prob * 100}%`;
-    bar.style.left = `${index * 30}px`;
     // Highlight the predicted bar
     if(index === data.prediction){
       bar.classList.add('active');
@@ -147,7 +146,6 @@ function updateCharacterResults(data){
     const bar = document.createElement('div');
     bar.className = 'chart-bar-character';
     bar.style.height = `${prob * 100}%`;
-    bar.style.left = `${index * 27}px`;
     // Highlight the predicted bar
     if(index === data.prediction){
       bar.classList.add('active');
@@ -162,7 +160,6 @@ function updateCharacterResults(data){
     const bar = document.createElement('div');
     bar.className = 'chart-bar-character';
     bar.style.height = `${prob * 100}%`;
-    bar.style.left = `${index * 27}px`;
     // Highlight the predicted bar
     if(index+26 === data.prediction){
       bar.classList.add('active');
