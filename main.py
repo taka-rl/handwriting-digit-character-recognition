@@ -5,6 +5,7 @@ import numpy as np
 import base64
 import io
 import os
+from gss import save_to_sheet
 
 
 with open("static/models/model_digit.json", "r") as json_file:
@@ -72,6 +73,9 @@ def submit_digit_drawing():
         predicted_class = int(np.argmax(predictions))  # Convert NumPy scalar to int
         confidence = float(np.max(predictions))  # Convert Numpy scalar to float
 
+        # Save the input drawn digit data and prediction data to Google Spreadsheet
+        id_num = save_to_sheet('Digit', str(image_data), predicted_class, confidence)
+
         return jsonify({"prediction": predicted_class,
                         "confidence": confidence,
                         "probabilities": predictions.tolist()
@@ -112,6 +116,9 @@ def submit_character_drawing():
         # Split predictions into uppercase and lowercase
         upper_predictions = predictions[0][:26]
         lower_predictions = predictions[0][26:]
+
+        # Save the input drawn character data and prediction data to Google Spreadsheet
+        id_num = save_to_sheet('Character', str(image_data), character_list[predicted_class], confidence)
 
         return jsonify({"prediction": character_list[predicted_class],
                         "confidence": confidence,
@@ -203,4 +210,4 @@ def preprocess_image(image, target_size=(28, 28)):
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(debug=True, host='0.0.0.0', port=port)
