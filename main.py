@@ -5,7 +5,7 @@ import numpy as np
 import base64
 import io
 import os
-from gss import save_to_sheet
+from gss import save_to_sheet, get_google_sheet
 
 
 with open("static/models/model_digit.json", "r") as json_file:
@@ -78,7 +78,8 @@ def submit_digit_drawing():
 
         return jsonify({"prediction": predicted_class,
                         "confidence": confidence,
-                        "probabilities": predictions.tolist()
+                        "probabilities": predictions.tolist(),
+                        "id_num": id_num
                         })
 
     except Exception as e:
@@ -123,8 +124,37 @@ def submit_character_drawing():
         return jsonify({"prediction": character_list[predicted_class],
                         "confidence": confidence,
                         "upper_probabilities": upper_predictions.tolist(),
-                        "lower_probabilities": lower_predictions.tolist()
+                        "lower_probabilities": lower_predictions.tolist(),
+                        "id_num": id_num
                         })
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route('/submit-feedback', methods=['POST'])
+def submit_feedback():
+    data = request.json
+    id_num = data.get('id_num')
+    correct_label = data.get('correct_label')
+
+    if id_num is None:
+        return jsonify({"error": "Invalid ID"}), 400
+
+    try:
+        if correct_label.isdigit():
+            sheet = get_google_sheet('Digit')  # Load the sheet
+        else:
+            sheet = get_google_sheet('Character')
+        cell = sheet.find(str(id_num))  # Find the row using id_num
+        row_index = cell.row
+
+        print(correct_label)
+
+        # Update it in the spreadsheet
+        sheet.update_cell(row_index, 6, correct_label)  # Update the 'User_Corrected_Label' column
+
+        return jsonify({"success": True})
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500

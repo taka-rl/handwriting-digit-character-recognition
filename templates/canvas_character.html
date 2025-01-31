@@ -18,6 +18,16 @@
       <h2>Prediction</h2>
       <div id="prediction" class="prediction">?</div>
       <div id="confidence" class="confidence">Confidence: -</div>
+      <div class="feedback-section">
+        <p>Is the prediction correct?</p>
+        <button onclick="submitFeedback(true)">Yes</button>
+        <button onclick="showCorrectionInput()">No</button>
+        <div id="correctionForm" style="display:none;">
+          <label for="correctLabel">Enter Correct Label:</label>
+          <input type="text" id="correctLabel" maxlength="1">
+          <button onclick="submitFeedback(false)">Submit</button>
+        </div>
+      </div>
       <div id="upperChartContainer" class="chart-container-character">
         <!-- Uppercase Bars will be dynamically added here -->
       </div>
