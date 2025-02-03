@@ -15,7 +15,7 @@ def get_google_sheet(sheet_name: str, sheet_title: str = 'Handwriting-recognitio
     return sh.worksheet(sheet_name)
 
 
-def save_to_sheet(sheet_name: str, image_data: str, predicted_label: int, confidence: float):
+def save_to_sheet(sheet_name: str, image_data: str, predicted_label: str, confidence: float, correct_label: str):
     """
     Save the digit or character data and the prediction data into Google Spreadsheet and return the row ID.
 
@@ -24,9 +24,8 @@ def save_to_sheet(sheet_name: str, image_data: str, predicted_label: int, confid
         image_data: the drawn digit or character by users
         predicted_label: the predicted label
         confidence: the percentage of the predicted label
+        correct_label: the correct label
 
-    Returns:
-        id_num: the row ID stored in the Google Spreadsheet
     """
     sheet = get_google_sheet(sheet_name)
 
@@ -34,9 +33,8 @@ def save_to_sheet(sheet_name: str, image_data: str, predicted_label: int, confid
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
     # Append data to the spreadsheet
-    sheet.append_row([id_num, image_data, predicted_label, confidence, timestamp])
+    sheet.append_row([id_num, image_data, predicted_label, confidence, correct_label, timestamp])
     print("Data saved successfully!")
-    return id_num
 
 
 def get_last_row(sheet) -> int:

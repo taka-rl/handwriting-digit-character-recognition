@@ -50,8 +50,6 @@ function changeDrawingColor(color){
   ctx.strokeStyle = color; // Update the stroke color
 }
 
-let lastPredictionId = null;
-
 function submitDigitDrawing(){
   const dataURL = canvas.toDataURL('image/png');
   fetch('/submit-digit', {
@@ -68,7 +66,6 @@ function submitDigitDrawing(){
       return;
     }
     updateDigitResults(data);
-    lastPredictionId = data.id_num;  // Store the prediction row ID
   })
   .catch(error => console.error('Error:', error));
 }
@@ -89,7 +86,6 @@ function submitCharacterDrawing(){
       return;
     }
     updateCharacterResults(data);
-    lastPredictionId = data.id_num;  // Store the prediction row ID
   })
   .catch(error => console.error('Error:', error));
 }
@@ -179,10 +175,9 @@ function showCorrectionInput() {
 }
 
 function submitFeedback(isCorrect) {
-    if (!lastPredictionId) {
-        alert("No prediction found to provide feedback.");
-        return;
-    }
+    const dataURL = canvas.toDataURL('image/png');
+    const confidenceElement = document.getElementById('confidence').textContent;
+    const predictedLabel = document.getElementById("prediction").textContent;
 
     let correctLabel;
     if (isCorrect) {
@@ -197,7 +192,9 @@ function submitFeedback(isCorrect) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            id_num: lastPredictionId,
+            image: dataURL,
+            predictedLabel: predictedLabel,
+            confidence: confidenceElement,
             correct_label: correctLabel
         })
     })

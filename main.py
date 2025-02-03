@@ -73,13 +73,9 @@ def submit_digit_drawing():
         predicted_class = int(np.argmax(predictions))  # Convert NumPy scalar to int
         confidence = float(np.max(predictions))  # Convert Numpy scalar to float
 
-        # Save the input drawn digit data and prediction data to Google Spreadsheet
-        id_num = save_to_sheet('Digit', str(image_data), predicted_class, confidence)
-
         return jsonify({"prediction": predicted_class,
                         "confidence": confidence,
                         "probabilities": predictions.tolist(),
-                        "id_num": id_num
                         })
 
     except Exception as e:
@@ -118,14 +114,10 @@ def submit_character_drawing():
         upper_predictions = predictions[0][:26]
         lower_predictions = predictions[0][26:]
 
-        # Save the input drawn character data and prediction data to Google Spreadsheet
-        id_num = save_to_sheet('Character', str(image_data), character_list[predicted_class], confidence)
-
         return jsonify({"prediction": character_list[predicted_class],
                         "confidence": confidence,
                         "upper_probabilities": upper_predictions.tolist(),
                         "lower_probabilities": lower_predictions.tolist(),
-                        "id_num": id_num
                         })
 
     except Exception as e:
@@ -134,25 +126,29 @@ def submit_character_drawing():
 
 @app.route('/submit-feedback', methods=['POST'])
 def submit_feedback():
+    """
+    Submit a feecback from users to Google Spreadsheet
+
+    """
     data = request.json
-    id_num = data.get('id_num')
+    predict_label = data.get('predictedLabel')
     correct_label = data.get('correct_label')
 
-    if id_num is None:
-        return jsonify({"error": "Invalid ID"}), 400
+    image = data.get('image')
+    if ',' in image:
+        header, encoded = image.split(',', 1)
+    else:
+        return jsonify({'error': 'Invalid Base64 image format'}), 400
+    image_data = base64.b64decode(encoded)
+
+    confidence = data.get('confidence')
+    confidence = confidence.replace('Confidence: ', '')
 
     try:
-        if correct_label.isdigit():
-            sheet = get_google_sheet('Digit')  # Load the sheet
-        else:
-            sheet = get_google_sheet('Character')
-        cell = sheet.find(str(id_num))  # Find the row using id_num
-        row_index = cell.row
+        sheet_name = 'Digit' if correct_label.isdigit() else sheet_name = 'Character'
 
-        print(correct_label)
-
-        # Update it in the spreadsheet
-        sheet.update_cell(row_index, 6, correct_label)  # Update the 'User_Corrected_Label' column
+        # Save the input drawn digit data and prediction data to Google Spreadsheet
+        save_to_sheet(sheet_name, str(image_data), str(predict_label), confidence, str(correct_label))
 
         return jsonify({"success": True})
 
