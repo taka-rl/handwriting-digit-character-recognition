@@ -64,6 +64,9 @@ User can give a feedback against the prediction result.
 If either "Yes" or "No" is clicked, the drawn digit/character, prediction results(predict label and confidence) and the correct label are sent to the Google Spreadsheet.
 Users can input the correct label if the prediction is not correct. 
 ![image](https://github.com/user-attachments/assets/4b19a3de-6a56-4008-ae4b-ef4ba0bf445d)
+If the data is sent properly, the following message shows up.  
+![image](https://github.com/user-attachments/assets/f0a6833f-7a7b-4fde-922a-87741ba5984c)
+
 
 ## Todo
 - Deepen the understanding of TensorFlow and machine learning and deep learning knowledges 
