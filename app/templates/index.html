@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Handwriting Recognition{% endblock %}
+
+{% block content %}
+<h2>Handwriting Recognition</h2>
+<p>Choose an option to start:</p>
+<button onclick="window.location.href='{{ url_for('canvas.canvas_digit') }}'">Draw a Digit on Canvas </button>
+<button onclick="window.location.href='{{ url_for('import_file.import_digit_picture') }}'">Import a Digit Picture</button>
+<button onclick="window.location.href='{{ url_for('canvas.canvas_character') }}'">Draw a Character on Canvas </button>
+<button onclick="window.location.href='{{ url_for('import_file.import_character_picture') }}'">Import a Character Picture</button>
+{% endblock %}
