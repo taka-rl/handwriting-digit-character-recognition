@@ -119,11 +119,7 @@ def submit_feedback():
     data = request.json
     predict_label = data.get('predictedLabel')
     correct_label = data.get('correct_label')
-
     image = data.get('image')
-    encoded = validate_image(image)
-    image_data = base64.b64decode(encoded)
-
     confidence = data.get('confidence')
     confidence = confidence.replace('Confidence: ', '')
 
@@ -131,7 +127,7 @@ def submit_feedback():
         sheet_name = 'Digit' if correct_label.isdigit() else 'Character'
 
         # Save the input drawn digit data and prediction data to Google Spreadsheet
-        save_to_sheet(sheet_name, str(image_data), str(predict_label), confidence, str(correct_label))
+        save_to_sheet(sheet_name, str(image), str(predict_label), confidence, str(correct_label))
 
         return jsonify({"success": True})
 
