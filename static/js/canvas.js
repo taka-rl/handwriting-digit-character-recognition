@@ -169,3 +169,42 @@ function updateCharacterResults(data){
     lowerChartContainer.appendChild(bar);
   });
 }
+
+function showCorrectionInput() {
+    document.getElementById("correctionForm").style.display = "block";
+}
+
+function submitFeedback(isCorrect) {
+    const dataURL = canvas.toDataURL('image/png');
+    const confidenceElement = document.getElementById('confidence').textContent;
+    const predictedLabel = document.getElementById("prediction").textContent;
+
+    let correctLabel;
+    if (isCorrect) {
+        correctLabel = document.getElementById("prediction").textContent; // Use the predicted value
+    } else {
+        correctLabel = document.getElementById("correctLabel").value; // Get the manually entered label
+    }
+
+    fetch('/submit-feedback', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            image: dataURL,
+            predictedLabel: predictedLabel,
+            confidence: confidenceElement,
+            correct_label: correctLabel
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert("Feedback submitted successfully!");
+        } else {
+            alert(`Error: ${data.error}`);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}

@@ -54,14 +54,21 @@ model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=
 2. Click either "Draw a Digit on Canvas" or "Draw a Character on Canvas".
 3. Draw any digits from 0 to 9 or draw any characters, and click the "Predict" button.  
 "Draw a Digit on Canvas"
-![image](https://github.com/user-attachments/assets/05f09d5b-25ff-44d4-a07f-841e0d84adc5)
-"Draw a Character on Canvas"
-![image](https://github.com/user-attachments/assets/6e33bf48-9fc9-4483-a993-34e27265e01a)
+![image](https://github.com/user-attachments/assets/cb349fcf-0753-457a-84df-599989f02e13)
 
+"Draw a Character on Canvas"
+![image](https://github.com/user-attachments/assets/7ea5293c-6bfd-4d1f-a4ea-b4bf6fbd900c)
+
+### Regarding the user feedback
+User can give a feedback against the prediction result.  
+If either "Yes" or "No" is clicked, the drawn digit/character, prediction results(predict label and confidence) and the correct label are sent to the Google Spreadsheet.
+Users can input the correct label if the prediction is not correct. 
+![image](https://github.com/user-attachments/assets/4b19a3de-6a56-4008-ae4b-ef4ba0bf445d)
 
 ## Todo
 - Deepen the understanding of TensorFlow and machine learning and deep learning knowledges 
 - Improve the model performance and accuracy for both digits and character recognition systems 
 - Build a model including both digits and characters
 - Make a single route based on functionalities(drawing or importing) such as submit route(drawing), upload route(importing).
-- Build a way of collecting data input by users and train the model with the collected data to improve
+- Build a way of collecting data input by users
+- Retrain models with the collected data to improve

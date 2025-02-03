@@ -5,6 +5,7 @@ import numpy as np
 import base64
 import io
 import os
+from gss import save_to_sheet
 
 
 with open("static/models/model_digit.json", "r") as json_file:
@@ -44,17 +45,9 @@ def canvas_character():
 
 @app.route('/submit-digit', methods=['POST'])
 def submit_digit_drawing():
-    if model_digit is None:
-        return jsonify({"error": "Digit model is not loaded"}), 500
     data = request.json.get('image', None)
-    if data is None:
-        return jsonify({"error": "No image data provided"})
+    encoded = validate_image(data)
     try:
-        if ',' in data:
-            header, encoded = data.split(',', 1)
-        else:
-            return jsonify({'error': 'Invalid Base64 image format'}), 400
-
         # Decode the Base 64 image
         image_data = base64.b64decode(encoded)
 
@@ -74,7 +67,7 @@ def submit_digit_drawing():
 
         return jsonify({"prediction": predicted_class,
                         "confidence": confidence,
-                        "probabilities": predictions.tolist()
+                        "probabilities": predictions.tolist(),
                         })
 
     except Exception as e:
@@ -84,14 +77,8 @@ def submit_digit_drawing():
 @app.route('/submit-character', methods=['POST'])
 def submit_character_drawing():
     data = request.json.get('image', None)
-    if data is None:
-        return jsonify({"error": "No image data provided"})
+    encoded = validate_image(data)
     try:
-        if ',' in data:
-            header, encoded = data.split(',', 1)
-        else:
-            return jsonify({'error': 'Invalid Base64 image format'}), 400
-
         # Decode the Base 64 image
         image_data = base64.b64decode(encoded)
 
@@ -116,8 +103,37 @@ def submit_character_drawing():
         return jsonify({"prediction": character_list[predicted_class],
                         "confidence": confidence,
                         "upper_probabilities": upper_predictions.tolist(),
-                        "lower_probabilities": lower_predictions.tolist()
+                        "lower_probabilities": lower_predictions.tolist(),
                         })
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route('/submit-feedback', methods=['POST'])
+def submit_feedback():
+    """
+    Submit a feedback from users to Google Spreadsheet
+
+    """
+    data = request.json
+    predict_label = data.get('predictedLabel')
+    correct_label = data.get('correct_label')
+
+    image = data.get('image')
+    encoded = validate_image(image)
+    image_data = base64.b64decode(encoded)
+
+    confidence = data.get('confidence')
+    confidence = confidence.replace('Confidence: ', '')
+
+    try:
+        sheet_name = 'Digit' if correct_label.isdigit() else 'Character'
+
+        # Save the input drawn digit data and prediction data to Google Spreadsheet
+        save_to_sheet(sheet_name, str(image_data), str(predict_label), confidence, str(correct_label))
+
+        return jsonify({"success": True})
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -201,6 +217,24 @@ def preprocess_image(image, target_size=(28, 28)):
     return img_array[np.newaxis, :, :]  # Add batch dimension
 
 
+def validate_image(image):
+    """
+    Validate and extract the image data.
+
+    Parameter:
+        data: the input drawn image, which is Base 64 image
+    Returns:
+        encoded: extracted only image data from the image
+    """
+    if image is None:
+        return jsonify({"error": "No image data provided"})
+    if ',' in image:
+        header, encoded = image.split(',', 1)
+        return encoded
+    else:
+        return jsonify({'error': 'Invalid Base64 image format'}), 400
+
+
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(debug=True, host='0.0.0.0', port=port)
