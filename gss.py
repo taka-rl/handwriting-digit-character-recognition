@@ -29,13 +29,9 @@ def save_to_sheet(sheet_name: str, image_data: str, predicted_label: str, confid
     """
     sheet = get_google_sheet(sheet_name)
 
-    id_num = get_last_row(sheet)
+    id_num = len(sheet.col_values(1))
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
     # Append data to the spreadsheet
     sheet.append_row([id_num, image_data, predicted_label, confidence, correct_label, timestamp])
     print("Data saved successfully!")
-
-
-def get_last_row(sheet) -> int:
-    return len(sheet.col_values(1))

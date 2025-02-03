@@ -5,7 +5,7 @@ import numpy as np
 import base64
 import io
 import os
-from gss import save_to_sheet, get_google_sheet
+from gss import save_to_sheet
 
 
 with open("static/models/model_digit.json", "r") as json_file:
@@ -45,17 +45,9 @@ def canvas_character():
 
 @app.route('/submit-digit', methods=['POST'])
 def submit_digit_drawing():
-    if model_digit is None:
-        return jsonify({"error": "Digit model is not loaded"}), 500
     data = request.json.get('image', None)
-    if data is None:
-        return jsonify({"error": "No image data provided"})
+    encoded = validate_image(data)
     try:
-        if ',' in data:
-            header, encoded = data.split(',', 1)
-        else:
-            return jsonify({'error': 'Invalid Base64 image format'}), 400
-
         # Decode the Base 64 image
         image_data = base64.b64decode(encoded)
 
@@ -85,14 +77,8 @@ def submit_digit_drawing():
 @app.route('/submit-character', methods=['POST'])
 def submit_character_drawing():
     data = request.json.get('image', None)
-    if data is None:
-        return jsonify({"error": "No image data provided"})
+    encoded = validate_image(data)
     try:
-        if ',' in data:
-            header, encoded = data.split(',', 1)
-        else:
-            return jsonify({'error': 'Invalid Base64 image format'}), 400
-
         # Decode the Base 64 image
         image_data = base64.b64decode(encoded)
 
@@ -127,7 +113,7 @@ def submit_character_drawing():
 @app.route('/submit-feedback', methods=['POST'])
 def submit_feedback():
     """
-    Submit a feecback from users to Google Spreadsheet
+    Submit a feedback from users to Google Spreadsheet
 
     """
     data = request.json
@@ -135,17 +121,14 @@ def submit_feedback():
     correct_label = data.get('correct_label')
 
     image = data.get('image')
-    if ',' in image:
-        header, encoded = image.split(',', 1)
-    else:
-        return jsonify({'error': 'Invalid Base64 image format'}), 400
+    encoded = validate_image(image)
     image_data = base64.b64decode(encoded)
 
     confidence = data.get('confidence')
     confidence = confidence.replace('Confidence: ', '')
 
     try:
-        sheet_name = 'Digit' if correct_label.isdigit() else sheet_name = 'Character'
+        sheet_name = 'Digit' if correct_label.isdigit() else 'Character'
 
         # Save the input drawn digit data and prediction data to Google Spreadsheet
         save_to_sheet(sheet_name, str(image_data), str(predict_label), confidence, str(correct_label))
@@ -232,6 +215,24 @@ def preprocess_image(image, target_size=(28, 28)):
     img = image.resize(target_size)  # Resize image
     img_array = np.array(img) / 255.0  # Convert to numpy array and normalize
     return img_array[np.newaxis, :, :]  # Add batch dimension
+
+
+def validate_image(image):
+    """
+    Validate and extract the image data.
+
+    Parameter:
+        data: the input drawn image, which is Base 64 image
+    Returns:
+        encoded: extracted only image data from the image
+    """
+    if image is None:
+        return jsonify({"error": "No image data provided"})
+    if ',' in image:
+        header, encoded = image.split(',', 1)
+        return encoded
+    else:
+        return jsonify({'error': 'Invalid Base64 image format'}), 400
 
 
 if __name__ == '__main__':
