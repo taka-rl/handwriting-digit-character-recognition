@@ -21,6 +21,8 @@ The frontend of prediction for importing images will be developed later.
     │   ├── static               # Static files (CSS, JS, models for recognition)
     │   ├── templates            # HTML templates
     │   └──  __init__.py         # Creates the Flask app and registers Blueprints
+    │── doc                      # Documents
+    │── tests                    # Unit testing
     │── main.py                  # Entry point of the app
     │── requirements.txt         # Dependencies
     │── .gcloudignore            # Ignore sensitive files for deployment on GCP
