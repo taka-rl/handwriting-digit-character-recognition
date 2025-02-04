@@ -11,7 +11,9 @@ env/
 *.idea/
 .DS_Store
 
-# Ignore tf_practice, doc folders
+# Ignore tf_practice, doc, tests, .github folders
 tf_practice/
 doc/
+tests/
+.github/
 
