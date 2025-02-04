@@ -8,6 +8,29 @@ There are two ways to predict, drawing or importing images.
 The prediction for drawing digits and characters have been completed.
 The frontend of prediction for importing images will be developed later.
 
+## Folder structure
+    │── app
+    │   ├── routes               # Store Blueprint routes here
+    │   │   ├── __init__.py
+    │   │   ├── canvas.py        # Handles digit/character drawing
+    │   │   ├── import_file.py   # Handles image uploads
+    │   │   ├── index.py         # Home route
+    │   ├── models.py            # Loads models at app startup
+    │   ├── utilities.py         # Helper functions (image processing, validation)
+    │   ├── gss.py               # Google Sheets API logic
+    │   ├── static               # Static files (CSS, JS, models for recognition)
+    │   ├── templates            # HTML templates
+    │   └──  __init__.py         # Creates the Flask app and registers Blueprints
+    │── doc                      # Documents
+    │── tests                    # Unit testing
+    │── main.py                  # Entry point of the app
+    │── requirements.txt         # Dependencies
+    │── .gcloudignore            # Ignore sensitive files for deployment on GCP
+    │── .gitignore               # Ignore sensitive files
+    │── app.yaml                 # Deployment
+    └── README.md
+
+
 ## model for both digit and character recognition
 The CNN model is used with the following layers. 
 ```
