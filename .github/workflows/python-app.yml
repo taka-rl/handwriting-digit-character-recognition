@@ -5,7 +5,7 @@ name: Python application
 
 on:
   push:
-    branches: [ "main", "20-introducing-pytest-for-unit-testing"]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
