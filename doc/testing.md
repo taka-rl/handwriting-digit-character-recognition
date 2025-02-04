@@ -22,3 +22,18 @@ https://blog.teclado.com/pytest-for-beginners/
 ## Introduce pytest to GitHub Actions
 1. Create app.yaml file by clicking Python application  
 ![img.png](img.png)
+
+
+## Steps to Store token.json Securely
+1. Go to your GitHub Repository → Settings → Secrets and variables → Actions.
+2. Click "New repository secret".
+3. Name it: TOKEN_JSON
+4. Paste the entire contents of your token.json file (formatted as JSON).
+5. Add the following code in your .github/workflows/python-app.yml
+
+    ```
+    - name: Create token.json file
+      run: echo "$TOKEN_JSON" > app/credentials/token.json
+      env:
+        TOKEN_JSON: ${{ secrets.TOKEN_JSON }}
+    ```
