@@ -38,3 +38,14 @@ def save_to_sheet(sheet_name: str, image_data: str, predicted_label: str, confid
     # Append data to the spreadsheet
     sheet.append_row([id_num, image_data, predicted_label, confidence, correct_label, timestamp])
     print("Data saved successfully!")
+
+
+def load_test_image_data(sheet_name: str):
+    """
+    Load a random image data from Google Spreadsheet for unit testing
+
+    Returns:
+        data on B2 cell (2,2) as string
+    """
+    sheet = get_google_sheet(sheet_name)
+    return sheet.cell(2, 2).value
