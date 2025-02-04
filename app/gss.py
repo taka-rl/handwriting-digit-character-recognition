@@ -1,12 +1,15 @@
 from datetime import datetime
 import gspread
+import os
+
+
+CREDENTIALS_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'credentials', 'token.json')
 
 
 def get_google_sheet(sheet_name: str, sheet_title: str = 'Handwriting-recognition'):
     """Get the Google Sheet instance."""
-
     # Load service account key file
-    gspread_client = gspread.service_account(filename="./token.json")
+    gspread_client = gspread.service_account(filename=CREDENTIALS_PATH)
 
     # Open Google Spreadsheet
     sh = gspread_client.open(sheet_title)
