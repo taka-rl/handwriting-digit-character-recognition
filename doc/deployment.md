@@ -1,8 +1,13 @@
 # About
-This document describe how I have deployed the app to App Engine on Google Cloud Platform(GCP)
+This document describes about two ways of deploying the app on Google Cloud Platform(GCP)
+
+- the app to GCP with App Engine from your laptop(local environment)
+- the app to GCP with Cloud run through GitHub repository, leading to CD(Continuous Deployment)
 
 ## Preparation: 
 Before starting, make sure you have a Google account for GCP.
+
+## Deployment with App Engine
 
 ### Folder structure for deployment as an example
 	Top directory
@@ -62,9 +67,15 @@ Before starting, make sure you have a Google account for GCP.
 4. Move to the app: gcloud app browse
 
 
-References:
+References:  
 https://cloud.google.com/appengine/docs/standard/python3/building-app/writing-web-service
 https://cloud.google.com/run/docs/quickstarts/build-and-deploy/deploy-python-service
 https://cloud.google.com/appengine/docs/standard/reference/app-yaml?tab=python#handlers_element
 
+
+## Deployment with Cloud run
+
+
+References:
+https://medium.com/codex/continuously-deploying-a-flask-app-from-a-github-repository-to-google-cloud-run-6f26226539b0
 
