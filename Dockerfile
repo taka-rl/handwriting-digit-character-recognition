@@ -14,4 +14,4 @@ RUN pip install -r requirements.txt
 EXPOSE 8080
 
 # Run app.py when the container launches
-CMD python main.py
+CMD gunicorn -b 0.0.0.0:$PORT main:app
