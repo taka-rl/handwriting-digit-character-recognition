@@ -40,6 +40,16 @@ def save_to_sheet(sheet_name: str, image_data: str, predicted_label: str, confid
     print("Data saved successfully!")
 
 
+def fetch_data_from_sheets(sheet_name: str):
+    """
+    Get the collected drawn data from users
+    Returns:
+        The collected drawn data
+    """
+    sheet = get_google_sheet(sheet_name)
+    return sheet.get_all_records()
+
+
 def load_test_image_data(sheet_name: str):
     """
     Load a random image data from Google Spreadsheet for unit testing

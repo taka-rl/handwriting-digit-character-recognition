@@ -1,6 +1,7 @@
 from flask import Flask
 from app.models import load_model
 
+
 def create_app():
     # Create Flask app instance
     app = Flask(__name__, template_folder='./templates', static_folder='./static')
