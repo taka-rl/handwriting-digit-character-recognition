@@ -132,7 +132,11 @@ class RecognitionSystem:
     @staticmethod
     def reshape_for_cnn(dataset: np.ndarray) -> np.ndarray:
         """
-        Reshape the data for CNN models
+        Reshape the data for CNN models. The data shape requires (Batch size, height, width, channels).
+
+        If the data.shape is the following:
+            data.shape: (5000, 28, 28) -> True: Reshaping is needed.
+            data.shape: (5000, 28, 28, 1) -> False: Reshaping is not needed.
 
         Parameters:
             dataset: data to reshape
