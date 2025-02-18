@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 
 def split_data(sheet_name, test_size=0.2):
     records = fetch_data_from_sheets(sheet_name)
-    x_data, y_data = recognition_system.create_test_dataset(records)
+    x_data, y_data = RecognitionSystem().create_test_dataset(records)
 
     # Split into 80% training, 20% test data
     x_train, x_test, y_train, y_test = train_test_split(x_data, y_data, test_size=test_size, random_state=42)
@@ -15,7 +15,7 @@ def split_data(sheet_name, test_size=0.2):
     return (x_train, y_train), (x_test, y_test)
 
 
-if __name__ == '__main__':
+def main():
     # Initialization
     recognition_system = RecognitionSystem()
     model = Model(dataset_name="mnist", model_type="CNN", epochs=10)
@@ -61,3 +61,7 @@ if __name__ == '__main__':
     # Save the model
     # model.save_model(model_path + model_name + "_retrained"), model.save_model_json()
     # model.save_training_history(model_path + model_name + "_retrained", history)
+
+
+if __name__ == '__main__':
+    main()
