@@ -1,7 +1,15 @@
 # handwriting-digit-character-recognition
-A Flask web app for handwriting digit and character recognition using machine learning.  
-Although this project is currently under development, both digit and character recognition systems have been developed so far!  
-Currently digit and character recognition systems have been implemented in separate routes(submit-digit, submit-character, upload-digit, upload-character). However, they will be in a single route based on functionalities(drawing or importing) later. For example, submit, upload.
+**This project is currently under development.**  
+A Flask web app for handwriting digit and character recognition.  
+The functions implemented are as follows: 
+- Handwriting drawn Digit/Character recognition
+- This app contains a data pipeline. 
+  - Feedback mechanism where users can confirm or correct predictions, sending validated data to Google Spreadsheet for data
+  collection.
+  - Retraining a model with the collected data to enhance accuracy. (Ideally but it isn't easy to collect a lot of data. Thus generated data from the MNIST dataset is used at the moment.)
+  - Automatically commit model files and deploy (This hasn't been implemented. Future plan)
+
+- Game mode(This hasn't been implemented. Future plan)
 
 ## digit and character recognition systems
 There are two ways to predict, drawing or importing images. 
@@ -98,5 +106,6 @@ If the data is sent properly, the following message shows up.
 - Improve the model performance and accuracy for both digits and character recognition systems 
 - Build a model including both digits and characters
 - Make a single route based on functionalities(drawing or importing) such as submit route(drawing), upload route(importing).
-- Build a way of collecting data input by users
 - Retrain models with the collected data to improve
+- Introduce Continuous Deployment(CD)
+- Add a game mode
