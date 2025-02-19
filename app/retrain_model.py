@@ -77,7 +77,7 @@ def retrain_model(sheet_name: str, epochs: int = 10, batch_size: int = 128) -> N
     train_data = (train_data[0].reshape(-1, 28, 28, 1), train_data[1])
     test_data = (test_data[0].reshape(-1, 28, 28, 1), test_data[1])
 
-    model_path = "../tf_practice/temp/digit_dummy_retrained"
+    model_path = "artifacts/digit_dummy_retrained"
 
     model_digit_old = model_digit
     model_digit_old.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
