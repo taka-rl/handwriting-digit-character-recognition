@@ -1,5 +1,8 @@
 from PIL import Image
 import numpy as np
+import base64
+import io
+from app.utilities import validate_image
 
 
 class RecognitionSystem:
@@ -78,6 +81,39 @@ class RecognitionSystem:
         # Normalization uint8 -> float32
         return data.astype('float32') / 255.0, label
 
+    def create_test_dataset(self, records):
+        """
+        Create dataset based on the collected data from Google Spreadsheet
+
+        Returns:
+            tuple[np.ndarray, np.ndarray]: created dataset including data and its label
+        """
+        images, labels = [None] * len(records), [None] * len(records)
+
+        for i, row in enumerate(records):
+            if row['User_Corrected_Label'] is not None and row['User_Corrected_Label'] != "":
+                # Only use data with corrected labels
+                try:
+                    image_data = validate_image(row['Data'])
+                    image_data = base64.b64decode(image_data)
+                    image = self.preprocess_data_from_sheet(image_data)
+                    images[i], labels[i] = image, int(row['User_Corrected_Label'])
+                except Exception as e:
+                    print(f"Error processing image: {e}")
+
+        return np.array(images, dtype='float32'), np.array(labels, dtype='uint8')
+
+    def preprocess_data_from_sheet(self, image_data):
+        """
+        Preprocess collected digit data from Google Spreadsheet
+
+        Returns:
+            Preprocessed image
+        """
+        image = Image.open(io.BytesIO(image_data)).convert('L')
+        image = self.preprocess_image(image)
+        return image
+
     @staticmethod
     def preprocess_image(img: Image.Image, target_size: tuple[int, int] = (28, 28)) -> np.ndarray:
         """
@@ -97,7 +133,11 @@ class RecognitionSystem:
     @staticmethod
     def reshape_for_cnn(dataset: np.ndarray) -> np.ndarray:
         """
-        Reshape the data for CNN models
+        Reshape the data for CNN models. The data shape requires (Batch size, height, width, channels).
+
+        If the data.shape is the following:
+            data.shape: (5000, 28, 28) -> True: Reshaping is needed.
+            data.shape: (5000, 28, 28, 1) -> False: Reshaping is not needed.
 
         Parameters:
             dataset: data to reshape
@@ -107,7 +147,9 @@ class RecognitionSystem:
         """
         # Split dataset into data and label
         data, label = dataset
-        return data.reshape(data.shape + (1,)), label
+        if data.shape[-1] != 1:
+            data = data.reshape((-1, 28, 28, 1))
+        return data, label
 
     @staticmethod
     def import_image(img_path: str) -> np.ndarray:

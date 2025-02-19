@@ -23,7 +23,7 @@ def save_to_sheet(sheet_name: str, image_data: str, predicted_label: str, confid
     Save the digit or character data and the prediction data into Google Spreadsheet and return the row ID.
 
     Parameters:
-        sheet_name: sheet names in the targeted Google Spreadsheet
+        sheet_name: a sheet name in the targeted Google Spreadsheet
         image_data: the drawn digit or character by users
         predicted_label: the predicted label
         confidence: the percentage of the predicted label
@@ -38,6 +38,16 @@ def save_to_sheet(sheet_name: str, image_data: str, predicted_label: str, confid
     # Append data to the spreadsheet
     sheet.append_row([id_num, image_data, predicted_label, confidence, correct_label, timestamp])
     print("Data saved successfully!")
+
+
+def fetch_data_from_sheets(sheet_name: str):
+    """
+    Get the collected drawn data from users
+    Returns:
+        The collected drawn data
+    """
+    sheet = get_google_sheet(sheet_name)
+    return sheet.get_all_records()
 
 
 def load_test_image_data(sheet_name: str):

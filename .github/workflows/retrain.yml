@@ -1,0 +1,58 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: Retrain Model (Manual Only)
+
+on:
+  workflow_dispatch:  # Allow manual trigger only
+
+# Possible to schedule this workflow using schedule:
+# on:
+  # schedule:
+    # - cron: '0 0 * * *'  # Run every day at midnight UTC
+    # Example cron expressions:
+    # ┌───────────── minute (0 - 59)
+    # │ ┌───────────── hour (0 - 23)
+    # │ │ ┌───────────── day of the month (1 - 31)
+    # │ │ │ ┌───────────── month (1 - 12 or JAN-DEC)
+    # │ │ │ │ ┌───────────── day of the week (0 - 6 or SUN-SAT)
+    # │ │ │ │ │
+    # │ │ │ │ │
+    # │ │ │ │ │
+    # * * * * *
+    # '0 0 * * *'   # Run every day at midnight UTC
+    # '15 3 * * *'  # Run every day at 3:15 AM UTC
+    # '0 */6 * * *' # Run every 6 hours
+
+jobs:
+  retrain:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
+
+      - name: Create token.json file
+        run: echo "$TOKEN_JSON" > app/credentials/token.json
+        env:
+          TOKEN_JSON: ${{ secrets.TOKEN_JSON }}
+
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Fetch Dummy Data
+        run: python dummy_data.py
+
+      - name: Retrain Model
+        run: python retrain_model.py
+
+      - name: Upload Retrained Model as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: retrained-model
+          path: ../static/models/digit_recognizer_cnn3_retrained.h5
