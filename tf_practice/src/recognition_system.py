@@ -91,7 +91,8 @@ class RecognitionSystem:
         images, labels = [None] * len(records), [None] * len(records)
 
         for i, row in enumerate(records):
-            if row['User_Corrected_Label'] is not None and row['User_Corrected_Label'] != "":  # Only use data with corrected labels
+            if row['User_Corrected_Label'] is not None and row['User_Corrected_Label'] != "":
+                # Only use data with corrected labels
                 try:
                     image_data = validate_image(row['Data'])
                     image_data = base64.b64decode(image_data)
