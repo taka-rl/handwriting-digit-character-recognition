@@ -4,9 +4,9 @@ import io
 import numpy as np
 import json
 from sklearn.model_selection import train_test_split
-from app.utilities import validate_image, preprocess_image
-from app.gss import fetch_data_from_sheets
-from app.models import model_digit
+from utilities import validate_image, preprocess_image
+from gss import fetch_data_from_sheets
+from models import model_digit
 
 
 def create_test_dataset(records):
@@ -62,9 +62,9 @@ def save_training_history(model_path: str, history) -> None:
 
 def save_model_json(model_path: str, model) -> None:
     model_json = model.to_json()
-    with open(f'{model_path}_model_structure_retrained.json', 'w') as json_file:
+    with open(f'{model_path}_model_structure.json', 'w') as json_file:
         json_file.write(model_json)
-    model.save_weights(f'{model_path}_weight_retrained.h5')
+    model.save_weights(f'{model_path}_weight.h5')
 
 
 def retrain_model(sheet_name: str, epochs: int = 10, batch_size: int = 128) -> None:
@@ -77,28 +77,29 @@ def retrain_model(sheet_name: str, epochs: int = 10, batch_size: int = 128) -> N
     train_data = (train_data[0].reshape(-1, 28, 28, 1), train_data[1])
     test_data = (test_data[0].reshape(-1, 28, 28, 1), test_data[1])
 
-    model_path = "../tf_practice/temp/digit_dummy"
+    model_path = "artifacts/digit_dummy_retrained"
+
+    model_digit_old = model_digit
+    model_digit_old.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+    model_digit.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
     print("Training model...")
-    model_digit.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
     history_digit = model_digit.fit(*train_data,
                                     epochs=epochs,
                                     batch_size=batch_size,
                                     validation_data=test_data,
                                     verbose=False)
 
+    # Evaluation
     loss_digit, acc_digit = model_digit.evaluate(*test_data)
     print(f"Trained model: Accuracy: {acc_digit:.4f}, Loss: {loss_digit:.4f}")
-
-    model_digit_old = model_digit
-    model_digit_old.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
     loss_digit_old, acc_digit_old = model_digit.evaluate(*test_data)
     print(f"Trained model: Accuracy: {acc_digit_old:.4f}, Loss: {loss_digit_old:.4f}")
 
     # Save the model and history
-    model_digit.save(f"{model_path}_retrained.h5")
-    save_model_json(f"{model_path}_retrained", model_digit)
-    save_training_history(f"{model_path}_retrained", history_digit)
+    model_digit.save(f"{model_path}.h5")
+    save_model_json(model_path, model_digit)
+    save_training_history(model_path, history_digit)
     print("Retraining Complete!")
 
 

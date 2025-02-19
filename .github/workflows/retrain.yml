@@ -46,13 +46,13 @@ jobs:
           pip install -r requirements.txt
 
       - name: Fetch Dummy Data
-        run: python dummy_data.py
+        run: python app/dummy_data.py
 
       - name: Retrain Model
-        run: python retrain_model.py
+        run: python app/retrain_model.py
 
       - name: Upload Retrained Model as Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: retrained-model
-          path: ../static/models/digit_recognizer_cnn3_retrained.h5
+          path: artifacts/digit_dummy_retrained*
