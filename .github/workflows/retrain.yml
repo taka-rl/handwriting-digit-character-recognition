@@ -52,7 +52,7 @@ jobs:
         run: python retrain_model.py
 
       - name: Upload Retrained Model as Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: retrained-model
-          path: ../static/models/digit_recognizer_cnn3_retrained.h5
+          path: ../tf_practice/temp/digit_dummy_retrained.*
