@@ -55,4 +55,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: retrained-model
-          path: artifacts/digit_dummy_retrained.*
+          path: artifacts/digit_dummy_retrained*
