@@ -46,7 +46,7 @@ The following scripts are used for the demo retraining and currently, the retrai
    - Generate and store some rotated data from the MNIST dataset to the Google Spreadsheet
      | Example: before rotation                      | Example: after 30 degree rotation             |
      | --------------------------------------------- | --------------------------------------------- |
-     | ![image](https://github.com/user-attachments/assets/4ebbff16-ff55-4043-9c2d-bc5995a39082) | ![image](https://github.com/user-attachments/assets/881418a6-abfe-4f07-954b-b86ea5973341 =250x250) |
+     | ![image](https://github.com/user-attachments/assets/4ebbff16-ff55-4043-9c2d-bc5995a39082) | ![image](https://github.com/user-attachments/assets/881418a6-abfe-4f07-954b-b86ea5973341) |
 
 3. Execute retrain_model.py
    - Collect the generated data from the Google Spreadsheet
