@@ -3,7 +3,7 @@ This document describe about the data pipeline that I built.
 This data pipeline employs flask app and Google Spreadsheet to store input data from users.
 
 
-## Procedures
+## Procedures of storing drawn data from users
 ### Google Spreadsheet related
 1. Enable the API: https://console.cloud.google.com/flows/enableapi?apiid=sheets.googleapis.com
 2. Configure the OAuth consent screen: https://console.cloud.google.com/apis/credentials/consent
@@ -31,8 +31,27 @@ https://developers.google.com/sheets/api/quickstart/python
 	```
 	sheet_name = 'Digit' if correct_label.isdigit() else 'Character'
 	 ```
+3. Users try the app and get some feedback from them.  
 
 
 ## Retraining a model with the collected drawn data from users
-Although the function that automatically retrain a model and update models for the recognition system has not been implemented, the sample code for retraining has been developed on [this file](https://github.com/taka-rl/handwriting-digit-character-recognition/blob/22-build-a-data-pipeline2/tf_practice/retrain_models.py).
+At the moment, it isn't easy to collect a lot of data from users, for the demo retraining, I temporarily extract some data from the MNIST data, ratating them with some degrees, storing them in the Google Spreadsheet.  
+The following scripts are used for the demo retraining and currently, the retraining is implemented for only digit.  
+- [dummy_data.py](https://github.com/taka-rl/handwriting-digit-character-recognition/blob/main/app/dummy_data.py): Generate rotated data from the MNIST data.
+- [retrain_model.py](https://github.com/taka-rl/handwriting-digit-character-recognition/blob/main/app/retrain_model.py): Retrain a model with the generated data from dummy_data.py
+
+### Retrain process in GitHub Actions
+1. Run retrain.yml (Temporarily manual trigger but it's possible to run regularly)
+2. Execute dummy_data.py
+   - Generate and store some rotated data from the MNIST dataset to the Google Spreadsheet
+     | Example: before rotation                      | Example: after 30 degree rotation             |
+     | --------------------------------------------- | --------------------------------------------- |
+     | ![image](https://github.com/user-attachments/assets/4ebbff16-ff55-4043-9c2d-bc5995a39082) | ![image](https://github.com/user-attachments/assets/881418a6-abfe-4f07-954b-b86ea5973341 =250x250) |
+
+3. Execute retrain_model.py
+   - Collect the generated data from the Google Spreadsheet
+   - Retrain a model
+   - Compare the accuracy and loss between the original and the retrained models
+   - Save the retrained model
+
 
