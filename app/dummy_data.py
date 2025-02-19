@@ -4,10 +4,7 @@ import base64
 import io
 import time
 from tensorflow.keras.datasets import mnist
-from app.gss import save_to_sheet, fetch_data_from_sheets
-from app.retrain_model import create_test_dataset
-from app.models import model_digit
-from tf_practice.src.utilities import create_prediction_plot
+from app.gss import save_to_sheet
 
 
 def generate_dummy_image():
@@ -62,14 +59,16 @@ def generate_rotate_mnist_data(rotation_range: int = 30):
 
     # Select a random MNIST digit
     idx = np.random.randint(0, x_train.shape[0])  # Random index
-    img = x_train[idx]  # Get image from MNIST dataset (already 28x28)
+    img = x_train[idx]
 
     # Convert to PIL image
     image_pil = Image.fromarray(img)
+    # plt.imshow(img, cmap='gray')  # debug
 
     # Apply random rotation within the specified range
     angle = np.random.uniform(-rotation_range, rotation_range)
     rotated_image = image_pil.rotate(angle, resample=Image.BILINEAR)
+    # plt.imshow(rotated_image, cmap='gray')  # debug
 
     # Convert to base64
     buffered = io.BytesIO()
@@ -96,33 +95,5 @@ def insert_generated_mnist_data(sheet_name: str, data_length: int = 10) -> None:
     print("Generated MINST data inserted!")
 
 
-def check_dummy_image(sheet_name: str):
-    # Collect data from the spreadsheet
-    records = fetch_data_from_sheets(sheet_name)
-
-    # Create and reshape the dataset
-    x_data, y_data = create_test_dataset(records)
-    x_data_cnn = x_data.reshape(-1, 28, 28, 1)
-    x_data = x_data.reshape(-1, 28, 28)
-
-    # Choose a random index
-    idx = np.random.randint(0, x_data.shape[0])
-
-    # Load a model from the digit recognition
-    model = model_digit
-
-    # Predict the image
-    predictions = model.predict(x_data_cnn)
-
-    # Extract the predicted class and confidence
-    predicted_class = int(np.argmax(predictions[idx]))  # Convert NumPy scalar to int
-    confidence = float(np.max(predictions[idx]))  # Convert Numpy scalar to float
-
-    # Create the plot
-    create_prediction_plot("Digit_dummy", predictions[0], predicted_class, confidence, y_data[idx], x_data_cnn[idx])
-
-
 if __name__ == '__main__':
     insert_generated_mnist_data("Digit_dummy")
-    # check_dummy_image("Digit_dummy")
-
