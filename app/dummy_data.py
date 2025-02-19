@@ -7,43 +7,6 @@ from tensorflow.keras.datasets import mnist
 from app.gss import save_to_sheet
 
 
-def generate_dummy_image():
-    """
-    Generate dummy image data.
-
-    Returns:
-        generated base64 dummy data.
-    """
-    img = np.random.randint(0, 256, (28, 28), dtype=np.uint8)
-    image_pil = Image.fromarray(img)
-    buffered = io.BytesIO()
-    image_pil.save(buffered, format="PNG")
-
-    return 'data:image/png;base64,' + base64.b64encode(buffered.getvalue()).decode()
-
-
-def insert_dummy_data(sheet_name: str = "Digit_dummy", data_length: int = 10) -> None:
-    """
-    Insert generated dummy data in the sheet.
-
-    Parameters:
-        sheet_name: a sheet name in the targeted Google Spreadsheet
-        data_length: the number of dummy data to insert in the sheet
-
-    """
-    print("Inserting dummy data into Google Sheets...")
-
-    for i in range(data_length):
-        image_data = generate_dummy_image()
-        predicted_label = np.random.randint(0, 10)  # Random digit (0-9)
-        confidence = round(np.random.uniform(0.6, 1.0), 2)  # Confidence (60%-100%)
-        correct_label = predicted_label
-        save_to_sheet(sheet_name, image_data, predicted_label, confidence, correct_label)
-        time.sleep(1)
-
-    print("Dummy data inserted!")
-
-
 def generate_rotate_mnist_data(rotation_range: int = 30):
     """
     Select a random digit from MNIST dataset, apply random rotation, and convert to base64.
