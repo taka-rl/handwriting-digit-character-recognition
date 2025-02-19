@@ -4,7 +4,7 @@ import base64
 import io
 import time
 from tensorflow.keras.datasets import mnist
-from app.gss import save_to_sheet
+from gss import save_to_sheet
 
 
 def generate_rotate_mnist_data(rotation_range: int = 30):
