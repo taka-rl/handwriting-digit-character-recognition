@@ -4,9 +4,9 @@ import io
 import numpy as np
 import json
 from sklearn.model_selection import train_test_split
-from app.utilities import validate_image, preprocess_image
-from app.gss import fetch_data_from_sheets
-from app.models import model_digit
+from utilities import validate_image, preprocess_image
+from gss import fetch_data_from_sheets
+from models import model_digit
 
 
 def create_test_dataset(records):
