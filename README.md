@@ -18,6 +18,8 @@ The frontend of prediction for importing images will be developed later.
     │   ├── models.py            # Loads models at app startup
     │   ├── utilities.py         # Helper functions (image processing, validation)
     │   ├── gss.py               # Google Sheets API logic
+    │   ├── dummy_data.py        # Generate rotated data from the MNIST data
+    │   ├── retrain_model.py     # Retrain a model with the generated data from dummy_data.py
     │   ├── static               # Static files (CSS, JS, models for recognition)
     │   ├── templates            # HTML templates
     │   └──  __init__.py         # Creates the Flask app and registers Blueprints
