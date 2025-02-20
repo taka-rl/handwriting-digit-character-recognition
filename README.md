@@ -1,12 +1,21 @@
-# handwriting-digit-character-recognition
-A Flask web app for handwriting digit and character recognition using machine learning.  
-Although this project is currently under development, both digit and character recognition systems have been developed so far!  
-Currently digit and character recognition systems have been implemented in separate routes(submit-digit, submit-character, upload-digit, upload-character). However, they will be in a single route based on functionalities(drawing or importing) later. For example, submit, upload.
+# Handwriting Digit & Character Recognition (Flask + TensorFlow)
+🚀 **Currently under development**  
+This is a Flask web application, allowing  users to recognize handwriting digit and character recognition using CNN models trained with TensorFlow.
 
-## digit and character recognition systems
-There are two ways to predict, drawing or importing images. 
-The prediction for drawing digits and characters have been completed.
-The frontend of prediction for importing images will be developed later.
+### ✨ **Key Features**
+✔️ **Digit & Character Recognition** → Users can draw or upload images for recognition.  
+✔️ **Feedback Mechanism** → Users can correct predictions, sending validated data to **Google Spreadsheets** for future training.  
+✔️ **Retraining Pipeline** → The model can be retrained using collected user data.  (Ideally but it isn't easy to collect a lot of data. Thus generated data from the MNIST dataset is used at the moment.)  
+✔️ **CI/CD Integration (Future Plan)** → Continuous Testing & Deployment planned.  
+✔️ **Game Mode (Future Plan)** → A fun challenge-based mode for handwriting recognition.
+
+## 🔍 How Recognition Works
+Users can recognize **handwritten digits and characters** in two ways:
+1. **Drawing on a Canvas** → (Implemented ✅)
+2. **Uploading an Image** → (Planned 🛠)
+
+Currently, **drawing-based recognition is fully functional**, while **image upload recognition is under development**.
+
 
 ## Folder structure
     │── app
@@ -33,8 +42,8 @@ The frontend of prediction for importing images will be developed later.
     └── README.md
 
 
-## model for both digit and character recognition
-The CNN model is used with the following layers. 
+## 🧠 CNN Model Architecture
+Both **digit and character recognition models** use **Convolutional Neural Networks (CNNs)** with the following architecture:
 ```
     num_classes is 10 for the digit recognition and 52 for the character recognition.
     model = tf.keras.Sequential([
@@ -57,24 +66,27 @@ The CNN model is used with the following layers.
         layers.Dense(num_classes, activation='softmax')
     ])
 ```
-The model for the digit recognition system was trained with MNIST dataset.
+### 🏋️ Model Training
+- **Digits** → Trained using the **MNIST dataset**.
+- **Characters** → Trained using the **EMNIST ByClass dataset**.
 ```
+- Digit
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 model.fit(*train_data, epochs=10, batch_size=128, validation_data=(x_test, y_test), verbose=False)
 ```
-The model for the character recognition system was trained with EMNIST byclass dataset.
 ```
+- Character
 x_train, y_train = extract_training_samples(dataset_class)
 x_test, y_test = extract_test_samples(dataset_class)
 model.fit(*train_data, epochs=10, batch_size=128, validation_split=0.2, verbose=False)
 ```
 
-The model was compiled with the following settings: 
+### Compile models 
 ```
 model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 ```
 
-## How to use
+## 🛠 How to Use
 1. Run the main.py  
 2. Click either "Draw a Digit on Canvas" or "Draw a Character on Canvas".
 3. Draw any digits from 0 to 9 or draw any characters, and click the "Predict" button.  
@@ -93,10 +105,10 @@ If the data is sent properly, the following message shows up.
 ![image](https://github.com/user-attachments/assets/f0a6833f-7a7b-4fde-922a-87741ba5984c)
 
 
-## Todo
-- Deepen the understanding of TensorFlow and machine learning and deep learning knowledges 
-- Improve the model performance and accuracy for both digits and character recognition systems 
-- Build a model including both digits and characters
-- Make a single route based on functionalities(drawing or importing) such as submit route(drawing), upload route(importing).
-- Build a way of collecting data input by users
-- Retrain models with the collected data to improve
+## 📌 Future Improvements
+✔️ **Enhance Model Performance** → Improve accuracy for both digits and characters.  
+✔️ **Combine Digit & Character Models** → Create a unified recognition system.  
+✔️ **Simplify API Routes** → Merge "Draw" and "Import" functionalities as there are two routes(digit/character).  
+✔️ **Enable Model Retraining** → Collect real user data for training.  
+✔️ **Deploy with Continuous Deployment (CD)** → Automate model updates.  
+✔️ **Introduce Game Mode** → Challenge users to draw characters quickly & accurately.
