@@ -50,7 +50,20 @@ def fetch_data_from_sheets(sheet_name: str):
     return sheet.get_all_records()
 
 
-def load_test_image_data(sheet_name: str):
+# ↓ ------ functions for unit testing ------ ↓
+def get_last_row(sheet_name: str) -> int:
+    """Get the last row"""
+    sheet = get_google_sheet(sheet_name)
+    return len(sheet.col_values(1))
+
+
+def delete_row(sheet_name: str, idx: int) -> None:
+    """Delete the specific row"""
+    sheet = get_google_sheet(sheet_name)
+    sheet.delete_rows(idx)
+
+
+def load_test_image_data(sheet_name: str) -> str:
     """
     Load a random image data from Google Spreadsheet for unit testing
 
