@@ -95,7 +95,7 @@ def submit_feedback():
 
     """
     data = request.json
-    predict_label = data.get('predictedLabel')
+    predict_label = data.get('predicted_label')
     correct_label = data.get('correct_label')
     image = data.get('image')
     confidence = data.get('confidence')

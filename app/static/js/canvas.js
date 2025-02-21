@@ -193,7 +193,7 @@ function submitFeedback(isCorrect) {
         },
         body: JSON.stringify({
             image: dataURL,
-            predictedLabel: predictedLabel,
+            predicted_label: predictedLabel,
             confidence: confidenceElement,
             correct_label: correctLabel
         })
