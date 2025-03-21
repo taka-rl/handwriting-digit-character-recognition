@@ -30,7 +30,8 @@ To store user input data, follow these steps:
 6. **Create a Google Spreadsheet named "Handwriting-recognition" for the data pipeline**
 7. **Share the Google Spreadsheet with the service account**  
    - Input "client_email" in token.json into the red rectangle.
-   ![image](https://github.com/user-attachments/assets/2a58b3fe-92a0-42cb-b9ac-c76dbe44f355)
+   ![image](https://github.com/user-attachments/assets/275fb494-17da-44cf-8429-10ba79978573)
+
 
 8. **Create two sheets named "Digit" and "Character" respectively.**
 
