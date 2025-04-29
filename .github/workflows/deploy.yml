@@ -1,0 +1,20 @@
+name: Deploy to Cloud Run
+
+on:
+  push:
+    branches: [ "main", "21-introducing-cd" ]
+  pull_request:
+    branches: [ "main", "21-introducing-cd" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Create token.json file
+        run: echo "$TOKEN_JSON" > app/credentials/token.json
+        env:
+          TOKEN_JSON: ${{ secrets.TOKEN_JSON }}
