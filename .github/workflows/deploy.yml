@@ -21,6 +21,11 @@ jobs:
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
 
+      - name: Verify gcloud auth
+        run: |
+          gcloud auth list
+          gcloud config list
+
       - name: Create token.json file
         run: echo "$TOKEN_JSON" > app/credentials/token.json
         env:
