@@ -15,7 +15,6 @@ env:
   SVC_ACCOUNT_EMAIL: ${{ secrets.GCP_SVC_ACCOUNT }}@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com
   REGION: ${{ vars.GCP_REGION }}
   BACKEND_GCF: https://${{ vars.GCP_REGION }}-${{ secrets.GCP_PROJECT_ID }}.${{ vars.GCP_FUNCTION_URI_SUFFIX }}
-  CR_UI_IMAGE_NAME: ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/image-text-translator-artifacts/image-text-translator-ui:${{ github.sha }}
   BUILD_LOGS_BUCKET: gs://${{ secrets.GCP_PROJECT_ID }}-gcloud-logs
   CREDENTIALS_PATH: ${{ github.workspace }}/gcp-key.json
 
