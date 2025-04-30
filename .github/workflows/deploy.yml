@@ -1,10 +1,10 @@
 name: Deploy to Cloud Run
 
 on:
-  push:
-    branches: [ "main", "21-introducing-cd" ]
-  pull_request:
-    branches: [ "main", "21-introducing-cd" ]
+  workflow_run:
+    workflows: [ "Test Workflow" ]  # must match the name in python-app.yml
+    types:
+      - completed
 
 permissions:
   contents: read
@@ -16,6 +16,7 @@ env:
 
 jobs:
   deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}  # Only run if unit test passed
     runs-on: ubuntu-latest
 
     steps:
