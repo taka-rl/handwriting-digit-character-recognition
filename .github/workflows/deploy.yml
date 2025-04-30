@@ -12,12 +12,12 @@ permissions:
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   SVC_ACCOUNT: ${{ secrets.GCP_SVC_ACCOUNT }}
-  GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}
   SVC_ACCOUNT_EMAIL: ${{ secrets.GCP_SVC_ACCOUNT }}@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com
   REGION: ${{ vars.GCP_REGION }}
   BACKEND_GCF: https://${{ vars.GCP_REGION }}-${{ secrets.GCP_PROJECT_ID }}.${{ vars.GCP_FUNCTION_URI_SUFFIX }}
   CR_UI_IMAGE_NAME: ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/image-text-translator-artifacts/image-text-translator-ui:${{ github.sha }}
   BUILD_LOGS_BUCKET: gs://${{ secrets.GCP_PROJECT_ID }}-gcloud-logs
+  CREDENTIALS_PATH: ${{ github.workspace }}/gcp-key.json
 
 jobs:
   deploy:
@@ -36,12 +36,15 @@ jobs:
           echo SVC_ACCOUNT_EMAIL="$SVC_ACCOUNT_EMAIL"
           echo BACKEND_GCF="$BACKEND_GCF"
 
-      # Authenticate with Google Cloud
-      - name: Authenticate to Google Cloud
+      - name: Write service account key file
         run: |
-          gcloud auth activate-service-account $SVC_ACCOUNT_EMAIL --key-file=$GOOGLE_APPLICATION_CREDENTIALS
+          echo "${{ secrets.GCP_SA_KEY_B64 }}" | base64 --decode > $CREDENTIALS_PATH
+
+      - name: Authenticate with Google Cloud
+        run: |
+          gcloud auth activate-service-account $SVC_EMAIL --key-file=$CREDENTIALS_PATH
           gcloud config set project $PROJECT_ID
-          gcloud config set functions/region $REGION
+          gcloud config set run/region $REGION
 
       - name: Setup Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
