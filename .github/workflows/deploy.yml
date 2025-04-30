@@ -14,7 +14,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Setup Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
       - name: Create token.json file
         run: echo "$TOKEN_JSON" > app/credentials/token.json
         env:
           TOKEN_JSON: ${{ secrets.TOKEN_JSON }}
+
+      - name: Build Docker image and push to GCR
+        run: |
+          gcloud builds submit --tag gcr.io/${{ secrets.GCP_PROJECT_ID }}/handwriting-recognition
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy handwriting-recognition \
+            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/handwriting-recognition \
+            --platform managed \
+            --region europe-central2 \
+            --allow-unauthenticated
