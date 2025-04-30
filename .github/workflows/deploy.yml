@@ -12,7 +12,6 @@ permissions:
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   REGION: ${{ vars.GCP_REGION }}
-  BUILD_LOGS_BUCKET: gs://${{ secrets.GCP_PROJECT_ID }}-gcloud-logs
   CREDENTIALS_PATH: ${{ github.workspace }}/gcp-key.json
 
 jobs:
@@ -39,13 +38,6 @@ jobs:
           gcloud config set project $PROJECT_ID
           gcloud config set run/region $REGION
 
-      - name: Setup Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
-        with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-          export_default_credentials: true
-
       - name: Verify gcloud auth
         run: |
           gcloud auth list
@@ -58,12 +50,12 @@ jobs:
 
       - name: Build Docker image and push to GCR
         run: |
-          gcloud builds submit --tag gcr.io/${{ secrets.GCP_PROJECT_ID }}/handwriting-digit-character-recognition
+          gcloud builds submit --tag gcr.io/$PROJECT_ID/handwriting-digit-character-recognition
 
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy handwriting-recognition \
-            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/handwriting-digit-character-recognition \
+            --image gcr.io/$PROJECT_ID/handwriting-digit-character-recognition \
             --platform managed \
             --region=$REGION \
             --allow-unauthenticated
