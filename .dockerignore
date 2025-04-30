@@ -1,0 +1,13 @@
+# Don't copy these into the container
+.git/
+*.pyc
+__pycache__/
+.env
+venv/
+.idea/
+.gcloudignore
+app.yaml
+tf_practice/
+doc/
+tests/
+.github/
