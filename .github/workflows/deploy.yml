@@ -11,10 +11,7 @@ permissions:
 
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  SVC_ACCOUNT: ${{ secrets.GCP_SVC_ACCOUNT }}
-  SVC_ACCOUNT_EMAIL: ${{ secrets.GCP_SVC_ACCOUNT }}@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com
   REGION: ${{ vars.GCP_REGION }}
-  BACKEND_GCF: https://${{ vars.GCP_REGION }}-${{ secrets.GCP_PROJECT_ID }}.${{ vars.GCP_FUNCTION_URI_SUFFIX }}
   BUILD_LOGS_BUCKET: gs://${{ secrets.GCP_PROJECT_ID }}-gcloud-logs
   CREDENTIALS_PATH: ${{ github.workspace }}/gcp-key.json
 
@@ -31,9 +28,6 @@ jobs:
           echo "Environment variables configured:"
           echo PROJECT_ID="$PROJECT_ID"
           echo REGION="$REGION"
-          echo SVC_ACCOUNT="$SVC_ACCOUNT"
-          echo SVC_ACCOUNT_EMAIL="$SVC_ACCOUNT_EMAIL"
-          echo BACKEND_GCF="$BACKEND_GCF"
 
       - name: Write service account key file
         run: |
