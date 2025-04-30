@@ -92,43 +92,43 @@ Developer -> Commit -> GitHub -> GitHub Actions (Unit test) -> GitHub Actions (d
 
 ### Procedures
 1. Set `Environment Secrets` and `Environment Variables` in repository
-- Environment Secrets
-	- GCP_PROJECT_ID: Your Google Cloud project ID  
-	If you don't know about it and if you have the Google Cloud SDK installed, run:  
-	```
- 	gcloud config list
- 	```
-   	This is your project ID.
- 	```
-	project = handwriting-recognition-systems
- 	```
+   - Environment Secrets
+       - GCP_PROJECT_ID: Your Google Cloud project ID  
+       If you don't know about it and if you have the Google Cloud SDK installed, run:  
+       ```
+        gcloud config list
+        ```
+   		This is your project ID.
+        ```
+       	project = handwriting-recognition-systems
+        ```
 
-	- GCP_SA_KEY_B64: Base64-encoded service account json file  
-     		1. Download Json style service account file    
-     		2. Open cmd and change the directory where the downloaded service account file exists  
-       		3. Run this command on cmd  
-		'''  
-  		base64 -w 0 path/to/your-service-account.json > service-account-key-base64.txt  
-  		'''  
-		4. Copy the entire base64 string from service-account-key-base64.txt, then, define it in `Environment Secrets`  
- 	- TOKEN_JSON: Necessary information for Google Spreadsheet
-![image](https://github.com/user-attachments/assets/1315b0ea-564f-4b61-a6ba-af4cb4b01101)  
+       - GCP_SA_KEY_B64: Base64-encoded service account json file  
+                1. Download Json style service account file    
+                2. Open cmd and change the directory where the downloaded service account file exists  
+                  3. Run this command on cmd  
+               '''  
+                 base64 -w 0 path/to/your-service-account.json > service-account-key-base64.txt  
+                 '''  
+               4. Copy the entire base64 string from service-account-key-base64.txt, then, define it in `Environment Secrets`  
+        - TOKEN_JSON: Necessary information for Google Spreadsheet
+   ![image](https://github.com/user-attachments/assets/1315b0ea-564f-4b61-a6ba-af4cb4b01101)  
 
 - Environment Variables
 	- GCP_REGION: Region such as europe-central2
 ![image](https://github.com/user-attachments/assets/8b3f2c9d-4d06-41b7-b950-b961c94ce3f1)  
 
 
-3. Create deploy.yml
+2. Create deploy.yml
 
 	```
- 	name: Deploy to Cloud Run
-
+	name: Deploy to Cloud Run
+	
 	on:
-	  push:
-		branches: [ "main", "21-introducing-cd" ]
-	  pull_request:
-		branches: [ "main", "21-introducing-cd" ]
+	  workflow_run:
+		workflows: [ "Test Workflow" ]  # must match the name in python-app.yml
+		types:
+		  - completed
 	
 	permissions:
 	  contents: read
@@ -140,6 +140,7 @@ Developer -> Commit -> GitHub -> GitHub Actions (Unit test) -> GitHub Actions (d
 	
 	jobs:
 	  deploy:
+		if: ${{ github.event.workflow_run.conclusion == 'success' }}  # Only run if unit test passed
 		runs-on: ubuntu-latest
 
     steps:
@@ -185,10 +186,9 @@ Developer -> Commit -> GitHub -> GitHub Actions (Unit test) -> GitHub Actions (d
             --allow-unauthenticated
 
 
-	
 	```
 
-4. Create Dockerfile
+3. Create Dockerfile
 
 	```
 	FROM python:3.10
