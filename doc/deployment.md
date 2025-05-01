@@ -95,13 +95,17 @@ If you would like to see the overview of CI/CD pipeline on this repository, plea
 
 
 ### Procedures
-1. Create the repository
-https://console.cloud.google.com/artifacts?invt=AbwQhA&inv=1
-2. Click “Create Repository”
-3. Fill out the form:
-Name: handwriting-images (Write your repository name)
-Format: Docker
-Location: europe-central2 (Write your region)
+1. Create the repository  
+https://console.cloud.google.com/artifacts?invt=AbwQhA&inv=1  
+2. Click “Create Repository”  
+![image](https://github.com/user-attachments/assets/79584f45-28a4-46b0-bbfe-93c54df82d31)  
+
+3. Fill out the form:  
+![image](https://github.com/user-attachments/assets/404b0f7c-da21-482e-9a53-b4d10154c459)  
+![image](https://github.com/user-attachments/assets/8f470428-54f2-4c3a-b561-a4a27a82379f)  
+Name: handwriting-images (Write your repository name)  
+Format: Docker  
+Location: europe-central2 (Write your region)  
 4. Click “Create”
 
 5. Set `Environment Secrets` and `Environment Variables` in the repository
@@ -128,7 +132,7 @@ Location: europe-central2 (Write your region)
    ![image](https://github.com/user-attachments/assets/1315b0ea-564f-4b61-a6ba-af4cb4b01101)  
 
 - Environment Variables
-	- GCP_REGION: Region such as europe-central2
+	- GCP_REGION: Region such as europe-central2 (This must be the same as the `Location` that you wrote on the 3.Fill out the form:  )
 ![image](https://github.com/user-attachments/assets/8b3f2c9d-4d06-41b7-b950-b961c94ce3f1)  
 
 6. Create deploy.yml
