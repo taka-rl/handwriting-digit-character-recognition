@@ -1,7 +1,10 @@
 name: Deploy to Cloud Run
 
 on:
-  workflow_dispatch:  # Allow manual trigger only
+  push:
+    branches: [ "main", "37-develop-cicd" ]
+  pull_request:
+    branches: [ "main", "37-develop-cicd" ]
 
   # workflow_run:
   #  workflows: [ "Test Workflow" ]  # must match the name in python-app.yml
