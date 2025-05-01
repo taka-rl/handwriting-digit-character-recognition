@@ -1,10 +1,13 @@
 name: Deploy to Cloud Run
 
 on:
-  workflow_run:
-    workflows: [ "Test Workflow" ]  # must match the name in python-app.yml
-    types:
-      - completed
+  push:
+    branches: [ "manual-deploy" ]
+
+  # workflow_run:
+  #  workflows: [ "Test Workflow" ]  # must match the name in python-app.yml
+  #  types:
+  #    - completed
 
 permissions:
   contents: read
