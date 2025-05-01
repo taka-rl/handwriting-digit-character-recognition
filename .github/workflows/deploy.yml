@@ -18,7 +18,8 @@ env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   REGION: ${{ vars.GCP_REGION }}
   CREDENTIALS_PATH: ${{ github.workspace }}/gcp-key.json
-  CR_UI_IMAGE_NAME: ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/handwriting-digit-character-recognition
+  CR_UI_IMAGE_NAME: ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/handwriting-images/handwriting-recognition:${{ github.sha }}
+
 
 jobs:
   deploy:
