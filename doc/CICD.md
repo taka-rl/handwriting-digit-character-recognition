@@ -69,8 +69,10 @@ gcloud run deploy handwriting-recognition \
   --allow-unauthenticated
 ```
 #### Docker
-Docker is a software platform where you can build, test, and deploy application. It packages software into standardized units called containers that have everything the software needs to run including libraries, system tools, code and runtime. [^6]
-
+Docker is a software platform where you can build, test, and deploy applications. It packages software into standardized units called containers that have everything the software needs to run including libraries, system tools, code and runtime. [^6]  
+A container allows developers to run the application quickly and reliably from one computing environment to another because it packages up code and all its dependencies. Although containers and virtual machines have similar resource isolation and allocation benefits, they work differently. Containers virtualize the operating system instead of hardware and are more portable and efficient. 
+Containers are an abstraction at the app layer that packages code and dependencies together. Multiple containers can run on the same machine and share the OS kernel with other containers, each running as isolated processes in user space. On the other hands, virtual machines(VMs) are an abstraction of physical hardware turning one server into many servers. The hypervisor makes it possible to run multiple VMs on a single machine. 
+[^7]  
 
 
 Reference:  
