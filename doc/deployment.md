@@ -1,5 +1,8 @@
 # About
-This document describe two ways of deploying the app.
+This document describe two ways of deploying the app. This doesn't contain the CI/CD pipeline overview, tools used in this repository.
+So if you would like to know about them, please check [CICD.md](https://github.com/taka-rl/handwriting-digit-character-recognition/tree/main/doc/CICD.md).
+The number 2 is used for the future development. 
+
 1. Deploy the app to App Engine on Google Cloud Platform(GCP)
 2. Deploy the app from a GitHub Repository to Google Cloud Run.
 
@@ -70,9 +73,10 @@ https://cloud.google.com/appengine/docs/standard/reference/app-yaml?tab=python#h
 
 
 ## Deployment with Google Cloud Run
-### Overview of the deployment
+The deployment is developed based on the following web page.  
+- Create a CI/CD Pipeline using GitHub Actions and Google Cloud: https://medium.com/google-cloud/create-a-ci-cd-pipeline-using-github-actions-and-google-cloud-9be20ff50e97  
 
-Developer -> Commit -> GitHub -> GitHub Actions (Unit test) -> GitHub Actions (deployment) -> Artifact Registry -> Google Cloud Run
+If you would like to see the overview of CI/CD pipeline on this repository, please check [CICD.md](https://github.com/taka-rl/handwriting-digit-character-recognition/tree/main/doc/CICD.md).  
 
 
 ### Folder structure for the deployment
@@ -91,7 +95,7 @@ Developer -> Commit -> GitHub -> GitHub Actions (Unit test) -> GitHub Actions (d
 
 
 ### Procedures
-1. Set `Environment Secrets` and `Environment Variables` in repository
+1. Set `Environment Secrets` and `Environment Variables` in the repository
    - Environment Secrets
        - GCP_PROJECT_ID: Your Google Cloud project ID  
        If you don't know about it and if you have the Google Cloud SDK installed, run:  
@@ -100,17 +104,17 @@ Developer -> Commit -> GitHub -> GitHub Actions (Unit test) -> GitHub Actions (d
         ```
    		This is your project ID.
         ```
-       	project = handwriting-recognition-systems
+       	project = project ID
         ```
 
        - GCP_SA_KEY_B64: Base64-encoded service account json file  
                 1. Download Json style service account file    
                 2. Open cmd and change the directory where the downloaded service account file exists  
-                  3. Run this command on cmd  
-               '''  
-                 base64 -w 0 path/to/your-service-account.json > service-account-key-base64.txt  
+                3. Run this command on cmd  
                  '''  
-               4. Copy the entire base64 string from service-account-key-base64.txt, then, define it in `Environment Secrets`  
+                   base64 -w 0 path/your-service-account.json > service-account-key-base64.txt  
+                   '''  
+                4. Copy the entire base64 string from service-account-key-base64.txt, then, define it in `Environment Secrets`  
         - TOKEN_JSON: Necessary information for Google Spreadsheet
    ![image](https://github.com/user-attachments/assets/1315b0ea-564f-4b61-a6ba-af4cb4b01101)  
 
@@ -185,7 +189,6 @@ Developer -> Commit -> GitHub -> GitHub Actions (Unit test) -> GitHub Actions (d
             --region=$REGION \
             --allow-unauthenticated
 
-
 	```
 
 3. Create Dockerfile
@@ -196,7 +199,7 @@ Developer -> Commit -> GitHub -> GitHub Actions (Unit test) -> GitHub Actions (d
 	# Set the working directory
 	WORKDIR /app
 	
-	# Copy the current directory contents into the container at /app
+	# Copy everything unless excluded by .dockerignore
 	COPY . .
 	
 	# Install the required dependencies
@@ -208,4 +211,3 @@ Developer -> Commit -> GitHub -> GitHub Actions (Unit test) -> GitHub Actions (d
 	# Run main.py when the container launches
 	CMD python main.py
 	```
-
