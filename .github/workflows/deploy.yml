@@ -18,6 +18,7 @@ env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   REGION: ${{ vars.GCP_REGION }}
   CREDENTIALS_PATH: ${{ github.workspace }}/gcp-key.json
+  CR_UI_IMAGE_NAME: ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/handwriting-digit-character-recognition
 
 jobs:
   deploy:
@@ -56,13 +57,12 @@ jobs:
 
       - name: Build Docker image and push to GCR
         run: |
-          gcloud builds submit --tag europe-central2-docker.pkg.dev/$PROJECT_ID/handwriting-digit-character-recognition
-          ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/image-text-translator-artifacts/image-text-translator-ui:${{ github.sha }}
+          gcloud builds submit --tag $CR_UI_IMAGE_NAME
 
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy handwriting-recognition \
-            --image europe-central2-docker.pkg.dev/$PROJECT_ID/handwriting-digit-character-recognition \
+            --image=$CR_UI_IMAGE_NAME \
             --platform managed \
             --region=$REGION \
             --allow-unauthenticated
