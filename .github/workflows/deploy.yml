@@ -13,6 +13,8 @@ env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   REGION: ${{ vars.GCP_REGION }}
   CREDENTIALS_PATH: ${{ github.workspace }}/gcp-key.json
+  CR_UI_IMAGE_NAME: ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/handwriting-images/handwriting-recognition:${{ github.sha }}
+
 
 jobs:
   deploy:
@@ -49,14 +51,14 @@ jobs:
         env:
           TOKEN_JSON: ${{ secrets.TOKEN_JSON }}
 
-      - name: Build Docker image and push to GCR
+      - name: Build Docker image and push to Google Artifact Registry
         run: |
-          gcloud builds submit --tag gcr.io/$PROJECT_ID/handwriting-digit-character-recognition
+          gcloud builds submit --tag $CR_UI_IMAGE_NAME
 
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy handwriting-recognition \
-            --image gcr.io/$PROJECT_ID/handwriting-digit-character-recognition \
+            --image=$CR_UI_IMAGE_NAME \
             --platform managed \
             --region=$REGION \
             --allow-unauthenticated

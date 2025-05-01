@@ -5,9 +5,9 @@ name: Test Workflow
 
 on:
   push:
-    branches: [ "main", "37-develop-cicd" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "main", "37-develop-cicd" ]
+    branches: [ "main" ]
 
 permissions:
   contents: read

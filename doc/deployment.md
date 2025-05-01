@@ -95,7 +95,20 @@ If you would like to see the overview of CI/CD pipeline on this repository, plea
 
 
 ### Procedures
-1. Set `Environment Secrets` and `Environment Variables` in the repository
+1. Create the repository  
+https://console.cloud.google.com/artifacts?invt=AbwQhA&inv=1  
+2. Click “Create Repository”  
+![image](https://github.com/user-attachments/assets/79584f45-28a4-46b0-bbfe-93c54df82d31)  
+
+3. Fill out the form:  
+![image](https://github.com/user-attachments/assets/404b0f7c-da21-482e-9a53-b4d10154c459)  
+![image](https://github.com/user-attachments/assets/8f470428-54f2-4c3a-b561-a4a27a82379f)  
+Name: handwriting-images (Write your repository name)  
+Format: Docker  
+Location: europe-central2 (Write your region)  
+4. Click “Create”
+
+5. Set `Environment Secrets` and `Environment Variables` in the repository
    - Environment Secrets
        - GCP_PROJECT_ID: Your Google Cloud project ID  
        If you don't know about it and if you have the Google Cloud SDK installed, run:  
@@ -119,33 +132,34 @@ If you would like to see the overview of CI/CD pipeline on this repository, plea
    ![image](https://github.com/user-attachments/assets/1315b0ea-564f-4b61-a6ba-af4cb4b01101)  
 
 - Environment Variables
-	- GCP_REGION: Region such as europe-central2
+	- GCP_REGION: Region such as europe-central2 (This must be the same as the `Location` that you wrote on the 3.Fill out the form:  )
 ![image](https://github.com/user-attachments/assets/8b3f2c9d-4d06-41b7-b950-b961c94ce3f1)  
 
-
-2. Create deploy.yml
+6. Create deploy.yml
 
 	```
 	name: Deploy to Cloud Run
-	
-	on:
-	  workflow_run:
-		workflows: [ "Test Workflow" ]  # must match the name in python-app.yml
-		types:
-		  - completed
-	
-	permissions:
-	  contents: read
-	
-	env:
-	  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-	  REGION: ${{ vars.GCP_REGION }}
-	  CREDENTIALS_PATH: ${{ github.workspace }}/gcp-key.json
-	
-	jobs:
-	  deploy:
-		if: ${{ github.event.workflow_run.conclusion == 'success' }}  # Only run if unit test passed
-		runs-on: ubuntu-latest
+
+    on:
+      workflow_run:
+        workflows: [ "Test Workflow" ]  # must match the name in python-app.yml
+        types:
+          - completed
+    
+    permissions:
+      contents: read
+    
+    env:
+      PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+      REGION: ${{ vars.GCP_REGION }}
+      CREDENTIALS_PATH: ${{ github.workspace }}/gcp-key.json
+      CR_UI_IMAGE_NAME: ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/handwriting-images/handwriting-recognition:${{ github.sha }}
+    
+    
+    jobs:
+      deploy:
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}  # Only run if unit test passed
+        runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
@@ -177,37 +191,37 @@ If you would like to see the overview of CI/CD pipeline on this repository, plea
         env:
           TOKEN_JSON: ${{ secrets.TOKEN_JSON }}
 
-      - name: Build Docker image and push to GCR
+      - name: Build Docker image and push to Google Artifact Registry
         run: |
-          gcloud builds submit --tag gcr.io/$PROJECT_ID/handwriting-digit-character-recognition
+          gcloud builds submit --tag $CR_UI_IMAGE_NAME
 
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy handwriting-recognition \
-            --image gcr.io/$PROJECT_ID/handwriting-digit-character-recognition \
+            --image=$CR_UI_IMAGE_NAME \
             --platform managed \
             --region=$REGION \
             --allow-unauthenticated
 
 	```
 
-3. Create Dockerfile
+7. Create Dockerfile
 
 	```
-	FROM python:3.10
-
-	# Set the working directory
-	WORKDIR /app
-	
-	# Copy everything unless excluded by .dockerignore
-	COPY . .
-	
-	# Install the required dependencies
-	RUN pip install -r requirements.txt
-	
-	# Make port 8080 available to the world outside this container
-	EXPOSE 8080
-	
-	# Run main.py when the container launches
-	CMD python main.py
+    FROM python:3.10-slim
+    
+    # Set the working directory
+    WORKDIR /app
+    
+    # Copy the current directory contents into the container at /app
+    COPY . .
+    
+    # Install the required dependencies
+    RUN pip install --no-cache-dir -r requirements.txt
+    
+    # Make port 8080 available to the world outside this container
+    EXPOSE 8080
+    
+    # Run main.py when the container launches
+    CMD python main.py
 	```

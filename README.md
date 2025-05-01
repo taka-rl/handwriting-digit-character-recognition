@@ -6,7 +6,7 @@ This is a Flask web application, allowing  users to recognize handwriting digit 
 ✔️ **Digit & Character Recognition** → Users can draw or upload images for recognition.  
 ✔️ **Feedback Mechanism** → Users can correct predictions, sending validated data to **Google Spreadsheets** for future training.  
 ✔️ **Retraining Pipeline** → The model can be retrained using collected user data.  (Ideally but it isn't easy to collect a lot of data. Thus generated data from the MNIST dataset is used at the moment.)  
-✔️ **CI/CD Integration (Future Plan)** → Continuous Testing & Deployment planned.  
+✔️ **Simple CI/CD pipeline** → GitHub Actions and Google Cloud Run are used.  [CI/CD pipeline doc](https://github.com/taka-rl/handwriting-digit-character-recognition/tree/main/doc/CICD.md)  
 ✔️ **Game Mode (Future Plan)** → A fun challenge-based mode for handwriting recognition.
 
 ## 🔍 How Recognition Works
@@ -35,12 +35,14 @@ Currently, **drawing-based recognition is fully functional**, while **image uplo
     │── doc                      # Documents
     │── tests                    # Unit testing
     │── main.py                  # Entry point of the app
-    │── requirements.txt         # Dependencies
+    │── requirements.txt         # Dependencies for development
+    │── requirements-ci.txt      # Dependencies for CI
+    │── requirements-prod.txt    # Dependencies for deployment
     │── Dockerfile               # Docker image for deployment
     │── .dockerignore            # Ignore sensitive files for Docker image
     │── .gcloudignore            # Ignore sensitive files for deployment on GCP
     │── .gitignore               # Ignore sensitive files
-    │── app.yaml                 # Deployment
+    │── app.yaml                 # Deployment for App Engine
     └── README.md
 
 
