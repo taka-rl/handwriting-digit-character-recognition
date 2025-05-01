@@ -56,12 +56,13 @@ jobs:
 
       - name: Build Docker image and push to GCR
         run: |
-          gcloud builds submit --tag gcr.io/$PROJECT_ID/handwriting-digit-character-recognition
+          gcloud builds submit --tag europe-central2-docker.pkg.dev/$PROJECT_ID/handwriting-digit-character-recognition
+          ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/image-text-translator-artifacts/image-text-translator-ui:${{ github.sha }}
 
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy handwriting-recognition \
-            --image gcr.io/$PROJECT_ID/handwriting-digit-character-recognition \
+            --image europe-central2-docker.pkg.dev/$PROJECT_ID/handwriting-digit-character-recognition \
             --platform managed \
             --region=$REGION \
             --allow-unauthenticated
