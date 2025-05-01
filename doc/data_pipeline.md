@@ -17,7 +17,6 @@ This data pipeline employs flask app and Google Spreadsheet to store input data 
    Input "client_email" in token.json into the red rectangle.
    ![image](https://github.com/user-attachments/assets/3b226ec4-69eb-4fe3-9fab-9147d98cb6b5)
 
-
 8. Create two sheets named "Digit" and "Character" respectively.
 
 Reference:  
