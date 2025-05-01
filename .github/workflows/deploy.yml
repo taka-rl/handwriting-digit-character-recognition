@@ -1,8 +1,7 @@
 name: Deploy to Cloud Run
 
 on:
-  push:
-    branches: [ "manual-deploy" ]
+  workflow_dispatch:  # Allow manual trigger only
 
   # workflow_run:
   #  workflows: [ "Test Workflow" ]  # must match the name in python-app.yml
