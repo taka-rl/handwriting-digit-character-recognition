@@ -7,7 +7,7 @@ WORKDIR /app
 COPY . .
 
 # Install the required dependencies
-RUN pip install -r requirements.txt
+RUN pip install -r requirements-prod.txt
 
 # Make port 8080 available to the world outside this container
 EXPOSE 8080
