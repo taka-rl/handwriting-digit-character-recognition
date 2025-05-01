@@ -1,15 +1,10 @@
 name: Deploy to Cloud Run
 
 on:
-  push:
-    branches: [ "main", "37-develop-cicd" ]
-  pull_request:
-    branches: [ "main", "37-develop-cicd" ]
-
-  # workflow_run:
-  #  workflows: [ "Test Workflow" ]  # must match the name in python-app.yml
-  #  types:
-  #    - completed
+  workflow_run:
+    workflows: [ "Test Workflow" ]  # must match the name in python-app.yml
+    types:
+      - completed
 
 permissions:
   contents: read
@@ -23,7 +18,7 @@ env:
 
 jobs:
   deploy:
-    # if: ${{ github.event.workflow_run.conclusion == 'success' }}  # Only run if unit test passed
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}  # Only run if unit test passed
     runs-on: ubuntu-latest
 
     steps:
@@ -56,7 +51,7 @@ jobs:
         env:
           TOKEN_JSON: ${{ secrets.TOKEN_JSON }}
 
-      - name: Build Docker image and push to GCR
+      - name: Build Docker image and push to Google Artifact Registry
         run: |
           gcloud builds submit --tag $CR_UI_IMAGE_NAME
 

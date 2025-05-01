@@ -35,7 +35,7 @@ Currently, **drawing-based recognition is fully functional**, while **image uplo
     │── doc                      # Documents
     │── tests                    # Unit testing
     │── main.py                  # Entry point of the app
-    │── requirements.txt         # Dependencies
+    │── requirements.txt         # Dependencies for development
     │── requirements-ci.txt      # Dependencies for CI
     │── requirements-prod.txt    # Dependencies for deployment
     │── Dockerfile               # Docker image for deployment
