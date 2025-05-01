@@ -1,0 +1,63 @@
+name: Deploy to Cloud Run
+
+on:
+  workflow_run:
+    workflows: [ "Test Workflow" ]  # must match the name in python-app.yml
+    types:
+      - completed
+
+permissions:
+  contents: read
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  REGION: ${{ vars.GCP_REGION }}
+  CREDENTIALS_PATH: ${{ github.workspace }}/gcp-key.json
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}  # Only run if unit test passed
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check env vars
+        run: |
+          echo "Environment variables configured:"
+          echo PROJECT_ID="$PROJECT_ID"
+          echo REGION="$REGION"
+
+      - name: Write service account key file
+        run: |
+          echo "${{ secrets.GCP_SA_KEY_B64 }}" | base64 --decode > $CREDENTIALS_PATH
+
+      - name: Authenticate with Google Cloud
+        run: |
+          gcloud auth activate-service-account $SVC_EMAIL --key-file=$CREDENTIALS_PATH
+          gcloud config set project $PROJECT_ID
+          gcloud config set run/region $REGION
+
+      - name: Verify gcloud auth
+        run: |
+          gcloud auth list
+          gcloud config list
+
+      - name: Create token.json file
+        run: echo "$TOKEN_JSON" > app/credentials/token.json
+        env:
+          TOKEN_JSON: ${{ secrets.TOKEN_JSON }}
+
+      - name: Build Docker image and push to GCR
+        run: |
+          gcloud builds submit --tag gcr.io/$PROJECT_ID/handwriting-digit-character-recognition
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy handwriting-recognition \
+            --image gcr.io/$PROJECT_ID/handwriting-digit-character-recognition \
+            --platform managed \
+            --region=$REGION \
+            --allow-unauthenticated
+

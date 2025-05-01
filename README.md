@@ -36,6 +36,8 @@ Currently, **drawing-based recognition is fully functional**, while **image uplo
     │── tests                    # Unit testing
     │── main.py                  # Entry point of the app
     │── requirements.txt         # Dependencies
+    │── Dockerfile               # Docker image for deployment
+    │── .dockerignore            # Ignore sensitive files for Docker image
     │── .gcloudignore            # Ignore sensitive files for deployment on GCP
     │── .gitignore               # Ignore sensitive files
     │── app.yaml                 # Deployment

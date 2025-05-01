@@ -25,13 +25,11 @@ To store user input data, follow these steps:
 3. **Create a service account:** [Create Service Account](https://console.cloud.google.com/apis/credentials)
 4. **Click ADD KEY and select JSON and download key file**
    ![image](https://github.com/user-attachments/assets/2913ccc1-eb46-42b8-8026-3e47e8309d68)
-
 5. **Rename a JSON file to "token.json"**
 6. **Create a Google Spreadsheet named "Handwriting-recognition" for the data pipeline**
 7. **Share the Google Spreadsheet with the service account**  
    - Input "client_email" in token.json into the red rectangle.
    ![image](https://github.com/user-attachments/assets/0ab60698-2a9d-4a3b-9d01-03987ea11255)
-
 
 8. **Create two sheets named "Digit" and "Character" respectively.**
 
