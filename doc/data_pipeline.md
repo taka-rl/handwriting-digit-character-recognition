@@ -15,8 +15,7 @@ This data pipeline employs flask app and Google Spreadsheet to store input data 
 6. Create a Google Spreadsheet named "Handwriting-recognition" for the data pipeline
 7. Share the Google Spreadsheet with the service account
    Input "client_email" in token.json into the red rectangle.
-   ![image](https://github.com/user-attachments/assets/4150fbc7-6257-499e-b01a-dfb28e040e3b)
-
+   ![image](https://github.com/user-attachments/assets/3b226ec4-69eb-4fe3-9fab-9147d98cb6b5)
 
 8. Create two sheets named "Digit" and "Character" respectively.
 
