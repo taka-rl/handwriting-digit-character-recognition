@@ -41,7 +41,7 @@ The CICD workflow is presented as below.
 3. The pipeline, which is Unit test through GitHub Actions runs.
 4. If the tests pass, the next GitHub Actions for deployment is executed.
 
-* I need to add one step to approve the changes and then the GitHub Actions for deployment is executed. *
+* It's a good idea to add one step to approve the changes and then the GitHub Actions for deployment is executed. This will be the future development.*
 
   | Name               | Description                                                                                                                                                                                                                                                                                                                 | 
   |--------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -76,11 +76,11 @@ Containers are an abstraction at the app layer that packages code and dependenci
 
 
 Reference:  
-[^1] Artifact Registry overview: https://cloud.google.com/artifact-registry/docs/overview  
-[^2] Create a CI/CD Pipeline using GitHub Actions and Google Cloud: https://medium.com/google-cloud/create-a-ci-cd-pipeline-using-github-actions-and-google-cloud-9be20ff50e97   
-[^3] What is Cloud Run: https://cloud.google.com/run/docs/overview/what-is-cloud-run  
-[^4] What is CI/CD?: https://github.com/resources/articles/devops/ci-cd  
-[^5] Continuous Integration Tools for DevOps – Jenkins vs. GitLab CI vs. GitHub Action: https://attractgroup.com/blog/continuous-integration-tools-for-devops-jenkins-vs-gitlab-ci-vs-github-action/  
-[^6] What is Docker?: https://aws.amazon.com/docker/#:~:text=Docker%20is%20a%20software%20platform,tools%2C%20code%2C%20and%20runtime.  
-[^7] What is a Container?: https://www.docker.com/resources/what-container/  
+[^1]: Artifact Registry overview: https://cloud.google.com/artifact-registry/docs/overview  
+[^2]: Create a CI/CD Pipeline using GitHub Actions and Google Cloud: https://medium.com/google-cloud/create-a-ci-cd-pipeline-using-github-actions-and-google-cloud-9be20ff50e97   
+[^3]: What is Cloud Run: https://cloud.google.com/run/docs/overview/what-is-cloud-run  
+[^4]: What is CI/CD?: https://github.com/resources/articles/devops/ci-cd  
+[^5]: Continuous Integration Tools for DevOps – Jenkins vs. GitLab CI vs. GitHub Action: https://attractgroup.com/blog/continuous-integration-tools-for-devops-jenkins-vs-gitlab-ci-vs-github-action/  
+[^6]: What is Docker?: https://aws.amazon.com/docker/#:~:text=Docker%20is%20a%20software%20platform,tools%2C%20code%2C%20and%20runtime.  
+[^7]: What is a Container?: https://www.docker.com/resources/what-container/  
 
